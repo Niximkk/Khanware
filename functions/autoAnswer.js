@@ -42,7 +42,8 @@ function findStartButton() {
 
 khanwareDominates = true;
 let skippedByAbsence = false;
-let retryClicked = false; 
+let retryClicked = false;
+let startClicked = false;
 
 (async () => {
     while (khanwareDominates) {
@@ -61,6 +62,7 @@ let retryClicked = false;
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
                 retryClicked = false;
+                startClicked = false;
                 continue;
             }
 
@@ -70,6 +72,7 @@ let retryClicked = false;
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
                 retryClicked = false;
+                startClicked = false;
                 continue;
             }
 
@@ -83,28 +86,36 @@ let retryClicked = false;
                 if (skippedByAbsence && !retryClicked) {
                     sendToast("🔁 Repetindo questão por erro anterior (ausência de resposta correta).", 2000);
                     retryButton.click();
-                    retryClicked = true;  
+                    retryClicked = true;
                     skippedByAbsence = false;
                 } else if (!skippedByAbsence) {
-                    retryClicked = false; 
+                    retryClicked = false;
                 }
                 continue;
             }
 
             if (!correctDetected) {
                 if (startButton) {
-                    sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
+                    if (!startClicked) {
+                        sendToast("⏳ Iniciando questão (botão 'Vamos lá' clicado).", 2000);
+                        startButton.click();
+                        startClicked = true;
+                    } else {
+                        sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
+                    }
                     continue;
                 }
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
-                retryClicked = false; 
+                retryClicked = false;
+                startClicked = false;
             } else {
                 sendToast("✅ Resposta correta detectada.", 1500);
                 skippedByAbsence = false;
                 retryClicked = false;
+                startClicked = false;
             }
         }
 
