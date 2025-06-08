@@ -1,7 +1,7 @@
 const ver = "V3.1.1";
 let isDev = false;
 
-const repoPath = https://raw.githubusercontent.com/LuizzLoL/Khanware/refs/heads/Adicionado-safe-skip-e-umas-coisinhas-ai/               
+const repoPath = https://raw.githubusercontent.com/LuizzLoL/Khanware/refs/heads/Adicionado-safe-skip-e-umas-coisinhas-ai/
 //`https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`; coloque isso de novo depois, mudado apenas para testar
 
 let device = {
