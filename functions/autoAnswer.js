@@ -30,15 +30,18 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-function findRetryButton() {
+function findRetryButtonSelector() {
     return Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === retryButtonText);
+        .find(el => el.textContent?.trim() === retryButtonText)?.getAttribute('data-testid') 
+        || null;
 }
 
-function findStartButton() {
+function findStartButtonSelector() {
     return Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === startButtonText);
+        .find(el => el.textContent?.trim() === startButtonText)?.getAttribute('data-testid') 
+        || null;
 }
+
 
 khanwareDominates = true;
 let skippedByAbsence = false;
@@ -73,23 +76,29 @@ let skippedByAbsence = false;
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            const retryButton = findRetryButton();
-            const startButton = findStartButton();
+
+            const retryButtonSelector = `[data-testid="retry-button"]`; 
+            const retryButton = Array.from(document.querySelectorAll("button, div"))
+                .find(el => el.textContent?.trim() === retryButtonText);
 
             if (retryButton) {
-                retryButton.click();
-                await delay(1000); // prevenir loop acelerado
+                findAndClickBySelector(`button, div`); 
+                await delay(1000);
                 skippedByAbsence = false;
                 continue;
             }
 
-            if (!correctDetected) {
-                if (startButton) {
-                    startButton.click();
-                    await delay(1000); // prevenir loop acelerado
-                    continue;
-                }
 
+            const startButton = Array.from(document.querySelectorAll("button, div"))
+                .find(el => el.textContent?.trim() === startButtonText);
+
+            if (startButton) {
+                findAndClickBySelector(`button, div`);
+                await delay(1000);
+                continue;
+            }
+
+            if (!correctDetected) {
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
