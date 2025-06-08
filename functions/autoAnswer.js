@@ -29,17 +29,6 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
     return false;
 }
 
-async function waitForCorrectFeedback(timeout = 6000) {
-    const start = Date.now();
-    while (Date.now() - start < timeout) {
-        if (document.querySelector(feedbackSelectors.correct)) {
-            return true; // feedback de acerto apareceu
-        }
-        await delay(100);
-    }
-    return false; // não apareceu a tempo
-}
-
 khanwareDominates = true;
 
 (async () => {
@@ -57,21 +46,29 @@ khanwareDominates = true;
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 feedback = "incorrect";
-            } else if (document.querySelector(feedbackSelectors.unanswered)) {
-                feedback = "unanswered";
-            } else {
-                // Espera até 6 segundos pelo feedback de acerto
-                const correctAppeared = await waitForCorrectFeedback(6000);
-                if (!correctAppeared) {
-                    feedback = "timeout_no_feedback";
-                }
-            }
-
-            if (feedback === "incorrect" || feedback === "unanswered" || feedback === "timeout_no_feedback") {
                 sendToast("⏭ Pulando questão por falha geral", 2000);
-                await delay(1000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+            } else if (document.querySelector(feedbackSelectors.unanswered)) {
+                feedback = "unanswered";
+                sendToast("⏭ Pulando questão por falha geral", 2000);
+                findAndClickBySelector(skipSelector);
+                await waitAndClickConfirmButton();
+            } else {
+                // Espera até 6s por feedback de acerto
+                const start = Date.now();
+                while (!document.querySelector(feedbackSelectors.correct) && Date.now() - start < 6000) {
+                    await delay(100);
+                }
+
+                if (document.querySelector(feedbackSelectors.correct)) {
+                    feedback = "correct";
+                    sendToast("✅ Resposta correta detectada.", 1500);
+                } else {
+                    sendToast("⏭ Pulando questão por falta de feedback de acerto.", 2000);
+                    findAndClickBySelector(skipSelector);
+                    await waitAndClickConfirmButton();
+                }
             }
         }
 
