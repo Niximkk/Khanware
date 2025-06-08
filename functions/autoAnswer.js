@@ -42,6 +42,7 @@ function findStartButton() {
 
 khanwareDominates = true;
 let skippedByAbsence = false;
+let retryClicked = false; 
 
 (async () => {
     while (khanwareDominates) {
@@ -59,6 +60,7 @@ let skippedByAbsence = false;
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
+                retryClicked = false;
                 continue;
             }
 
@@ -67,6 +69,7 @@ let skippedByAbsence = false;
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
+                retryClicked = false;
                 continue;
             }
 
@@ -77,27 +80,31 @@ let skippedByAbsence = false;
             const startButton = findStartButton();
 
             if (retryButton) {
-                if (skippedByAbsence) {
+                if (skippedByAbsence && !retryClicked) {
                     sendToast("🔁 Repetindo questão por erro anterior (ausência de resposta correta).", 2000);
                     retryButton.click();
+                    retryClicked = true;  
                     skippedByAbsence = false;
-                } else {
-                    skippedByAbsence = false;
+                } else if (!skippedByAbsence) {
+                    retryClicked = false; 
                 }
                 continue;
             }
 
             if (!correctDetected) {
                 if (startButton) {
-                    sendToast("⏳ Aguardando início da questão (botão 'Start' visível).", 2000);
+                    sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
                     continue;
                 }
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
+                retryClicked = false; 
             } else {
                 sendToast("✅ Resposta correta detectada.", 1500);
+                skippedByAbsence = false;
+                retryClicked = false;
             }
         }
 
