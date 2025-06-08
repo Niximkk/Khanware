@@ -30,15 +30,14 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-// Função que acha seletor baseado no texto do botão
-function findButtonSelectorByText(text) {
-    const btn = Array.from(document.querySelectorAll("button"))
-        .find(b => b.textContent?.trim() === text);
-    if (!btn) return null;
-    // Pega classes do botão e monta seletor CSS
-    let classes = Array.from(btn.classList).filter(c => c).join(".");
-    if (classes) classes = "." + classes;
-    return `button${classes}`;
+function clickButtonByText(text) {
+    const btn = Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === text);
+    if (btn) {
+        btn.click();
+        return true;
+    }
+    return false;
 }
 
 khanwareDominates = true;
@@ -74,22 +73,18 @@ let skippedByAbsence = false;
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            const retrySelector = findButtonSelectorByText(retryButtonText);
-            if (retrySelector) {
-                findAndClickBySelector(retrySelector);
+            if (clickButtonByText(retryButtonText)) {
                 await delay(1000);
                 skippedByAbsence = false;
                 continue;
             }
 
-            const startSelector = findButtonSelectorByText(startButtonText);
-            if (startSelector) {
-                findAndClickBySelector(startSelector);
-                await delay(1000);
-                continue;
-            }
-
             if (!correctDetected) {
+                if (clickButtonByText(startButtonText)) {
+                    await delay(1000);
+                    continue;
+                }
+
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
