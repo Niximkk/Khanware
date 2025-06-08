@@ -16,31 +16,34 @@ const feedbackSelectors = {
 };
 
 function findAndClickBySelector(selector) {
-    const element = document.querySelector(selector);
-    if (element) {
+    const el = document.querySelector(selector);
+    if (el) {
         const event = new MouseEvent("click", { bubbles: true, cancelable: true });
-        element.dispatchEvent(event);
+        el.dispatchEvent(event);
         return true;
     }
     return false;
 }
 
 function findAndClickByText(text) {
-    const element = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === text);
-    if (element) {
-        const event = new MouseEvent("click", { bubbles: true, cancelable: true });
-        element.dispatchEvent(event);
-        return true;
-    }
-    return false;
+    const el = Array.from(document.querySelectorAll("*"))
+        .find(e => e.textContent?.trim() === text);
+    if (!el) return false;
+
+    const clickable = el.closest("button, div");
+    if (!clickable) return false;
+
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    clickable.dispatchEvent(event);
+    return true;
 }
 
 async function waitAndClickConfirmButton(maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
-        const success = findAndClickByText(confirmSkipButtonText);
-        if (success) return true;
+        if (findAndClickByText(confirmSkipButtonText)) {
+            return true;
+        }
         await delay(100);
     }
     console.warn("⛔ Botão de confirmação não encontrado.");
@@ -48,7 +51,6 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
 }
 
 khanwareDominates = true;
-let skippedByAbsence = false;
 
 (async () => {
     while (khanwareDominates) {
@@ -64,14 +66,12 @@ let skippedByAbsence = false;
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-                skippedByAbsence = false;
                 continue;
             }
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-                skippedByAbsence = false;
                 continue;
             }
 
@@ -79,7 +79,6 @@ let skippedByAbsence = false;
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
             if (findAndClickByText(retryButtonText)) {
-                skippedByAbsence = false;
                 await delay(1000);
                 continue;
             }
@@ -91,7 +90,6 @@ let skippedByAbsence = false;
                 }
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-                skippedByAbsence = true;
             }
         }
 
