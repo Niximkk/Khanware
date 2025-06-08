@@ -8,8 +8,8 @@ const baseSelectors = [
 
 const skipSelector = `[data-testid="exercise-skip-button"]`;
 const feedbackSelectors = [
-    `[data-testid="exercise-feedback-popover-incorrect"]`,     // resposta errada
-    `[data-testid="exercise-feedback-popover-unanswered"]`     // resposta inválida
+    `[data-testid="exercise-feedback-popover-incorrect"]`, 
+    `[data-testid="exercise-feedback-popover-unanswered"]` 
 ];
 
 khanwareDominates = true;
