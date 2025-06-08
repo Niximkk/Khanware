@@ -7,6 +7,8 @@ const baseSelectors = [
 ];
 
 const skipSelector = `[data-testid="exercise-skip-button"]`;
+const confirmSkipSelector = `._15f36dw6`;
+
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`,
@@ -23,7 +25,7 @@ khanwareDominates = true;
             if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
 
             for (const q of selectorsToCheck) {
-                findAndClickBySelector(q); 
+                findAndClickBySelector(q);
             }
 
             let feedback = null;
@@ -33,20 +35,25 @@ khanwareDominates = true;
                 sendToast("❌ Resposta errada. Pulando...", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
+                await delay(500); // Aguarda o popup abrir
+                findAndClickBySelector(confirmSkipSelector); // Confirma pulo
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
                 feedback = "unanswered";
                 sendToast("⚠️ Pergunta não respondida. Pulando...", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
+                await delay(500);
+                findAndClickBySelector(confirmSkipSelector);
             } else if (document.querySelector(feedbackSelectors.correct)) {
                 feedback = "correct";
                 sendToast("✅ Resposta correta detectada.", 1500);
-                // Não pula — espera o próximo botão funcionar
             }
 
             if (!feedback) {
                 sendToast("⏭ Pulando questão por falha geral (sem feedback detectado).", 2000);
                 findAndClickBySelector(skipSelector);
+                await delay(500);
+                findAndClickBySelector(confirmSkipSelector);
             }
         }
 
