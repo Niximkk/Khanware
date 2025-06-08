@@ -8,6 +8,7 @@ const baseSelectors = [
 
 const skipSelector = `[data-testid="exercise-skip-button"]`;
 const confirmSkipButtonText = "Sim, pular";
+const retryButtonText = "Tentar novamente";
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
@@ -28,7 +29,13 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
     return false;
 }
 
+function findRetryButton() {
+    return Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === retryButtonText);
+}
+
 khanwareDominates = true;
+let skippedByAbsence = false;
 
 (async () => {
     while (khanwareDominates) {
@@ -45,6 +52,7 @@ khanwareDominates = true;
                 sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = false;
                 continue;
             }
 
@@ -52,19 +60,33 @@ khanwareDominates = true;
                 sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = false;
                 continue;
             }
 
-            // Verifica se existe um div com classe 'paragraph' e conteúdo "Resposta correta."
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            if (correctDetected) {
-                sendToast("✅ Resposta correta detectada.", 1500);
-            } else {
-                sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
+            const retryButton = findRetryButton();
+
+            if (retryButton) {
+                if (skippedByAbsence) {
+                    sendToast("🔁 Repetindo tentativa por erro anterior (ausência de resposta correta).", 2000);
+                    retryButton.click();
+                    skippedByAbsence = false;
+                } else {
+                    skippedByAbsence = false;
+                }
+                continue;
+            }
+
+            if (!correctDetected) {
+                sendToast("⏭ Pulando por ausência de feedback e de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = true;
+            } else {
+                sendToast("✅ Resposta correta detectada.", 1500);
             }
         }
 
