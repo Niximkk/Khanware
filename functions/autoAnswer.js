@@ -6,73 +6,25 @@ const baseSelectors = [
     `._awve9b`
 ];
 
-const wrongAnswerSelector = `._1bz2tu6k`;
-const skipSelector = `[data-testid="exercise-skip-button"]`;
-
-const feedbackSelectors = [
-    `[data-testid="exercise-feedback-popover-incorrect"]`,
-    `[data-testid="exercise-feedback-popover-unanswered"]`   
-];
-
 khanwareDominates = true;
-
-function shouldAnswerCorrectly() {
-    const chance = Math.random() * 100;
-    return chance <= featureConfigs.Accuracy;
-}
 
 (async () => { 
     while (khanwareDominates) {
         if (features.autoAnswer && features.questionSpoof) {
+            
+            const selectorsToCheck = [...baseSelectors];
 
-            let success = false;
-            let intentionalFail = false;
+            if (features.nextRecomendation) baseSelectors.push("._hxicrxf")
+            if (features.repeatQuestion) baseSelectors.push("._ypgawqo");
 
-            if (shouldAnswerCorrectly()) {
-                const selectorsToCheck = [...baseSelectors];
-
-                if (features.nextRecomendation) selectorsToCheck.push("._hxicrxf");
-                if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
-
-                for (const q of selectorsToCheck) {
-                    if (findAndClickBySelector(q)) {
-                        success = true;
-
-                        const summary = document.querySelector(q + "> div");
-                        if (summary && summary.innerText === "Mostrar resumo") {
-                            sendToast("🎉 Exercício concluído!", 3000);
-                            playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
-                        }
-
-                        break;
-                    }
+            for (const q of selectorsToCheck) {
+                findAndClickBySelector(q);
+                if (document.querySelector(q+"> div") && document.querySelector(q+"> div").innerText === "Mostrar resumo") {
+                    sendToast("🎉 Exercício concluído!", 3000);
+                    playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
                 }
-            } else {
-                intentionalFail = findAndClickBySelector(wrongAnswerSelector);
-                if (intentionalFail) {
-                    sendToast("⚠ Simulando resposta errada por acurácia.", 2000);
-                }
-            }
-
-            let feedbackDetected = false;
-            for (const selector of feedbackSelectors) {
-                const popup = document.querySelector(selector);
-                if (popup) {
-                    feedbackDetected = true;
-                    sendToast("❌ Resposta errada ou inválida. Pulando...", 2000);
-                    await delay(1000);
-
-                    findAndClickBySelector(skipSelector);
-                    break;
-                }
-            }
-
-            if (!success && !intentionalFail && !feedbackDetected) {
-                findAndClickBySelector(skipSelector);
-                sendToast("⏭ Pulando questão por falha geral.", 2000);
             }
         }
-
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
