@@ -15,34 +15,47 @@ const feedbackSelectors = {
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function findAndClickBySelector(selector) {
     const el = document.querySelector(selector);
     if (el) {
-        const event = new MouseEvent("click", { bubbles: true, cancelable: true });
-        el.dispatchEvent(event);
+        const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
+        el.dispatchEvent(evt);
         return true;
     }
     return false;
 }
 
-function findAndClickByText(text) {
-    const el = Array.from(document.querySelectorAll("*"))
-        .find(e => e.textContent?.trim() === text);
-    if (!el) return false;
-
-    const clickable = el.closest("button, div");
-    if (!clickable) return false;
-
-    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
-    clickable.dispatchEvent(event);
-    return true;
+function clickButtonBySpanText(text) {
+    const span = Array.from(document.querySelectorAll("span"))
+        .find(el => el.textContent?.trim() === text);
+    
+    if (span) {
+        const button = span.closest("button");
+        if (button && !button.disabled) {
+            const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
+            button.dispatchEvent(evt);
+            return true;
+        }
+    }
+    return false;
 }
 
 async function waitAndClickConfirmButton(maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
-        if (findAndClickByText(confirmSkipButtonText)) {
-            return true;
+        const span = Array.from(document.querySelectorAll("span"))
+            .find(el => el.textContent?.trim() === confirmSkipButtonText);
+        if (span) {
+            const button = span.closest("button");
+            if (button && !button.disabled) {
+                const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
+                button.dispatchEvent(evt);
+                return true;
+            }
         }
         await delay(100);
     }
@@ -64,14 +77,12 @@ khanwareDominates = true;
             }
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
-                sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
                 continue;
             }
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
-                sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
                 continue;
@@ -80,13 +91,13 @@ khanwareDominates = true;
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            if (findAndClickByText(retryButtonText)) {
+            if (clickButtonBySpanText(retryButtonText)) {
                 await delay(1000);
                 continue;
             }
 
             if (!correctDetected) {
-                if (findAndClickByText(startButtonText)) {
+                if (clickButtonBySpanText(startButtonText)) {
                     await delay(1000);
                     continue;
                 }
