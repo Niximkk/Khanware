@@ -6,6 +6,12 @@ const baseSelectors = [
     `._awve9b`
 ];
 
+const skipSelector = `[data-testid="exercise-skip-button"]`;
+const feedbackSelectors = [
+    `[data-testid="exercise-feedback-popover-incorrect"]`,     // resposta errada
+    `[data-testid="exercise-feedback-popover-unanswered"]`     // resposta inválida
+];
+
 khanwareDominates = true;
 
 (async () => { 
@@ -14,17 +20,44 @@ khanwareDominates = true;
             
             const selectorsToCheck = [...baseSelectors];
 
-            if (features.nextRecomendation) baseSelectors.push("._hxicrxf")
-            if (features.repeatQuestion) baseSelectors.push("._ypgawqo");
+            if (features.nextRecomendation) selectorsToCheck.push("._hxicrxf");
+            if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
+
+            let success = false;
 
             for (const q of selectorsToCheck) {
-                findAndClickBySelector(q);
-                if (document.querySelector(q+"> div") && document.querySelector(q+"> div").innerText === "Mostrar resumo") {
-                    sendToast("🎉 Exercício concluído!", 3000);
-                    playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
+                if (findAndClickBySelector(q)) {
+                    success = true;
+
+                    const summary = document.querySelector(q + "> div");
+                    if (summary && summary.innerText === "Mostrar resumo") {
+                        sendToast("🎉 Exercício concluído!", 3000);
+                        playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
+                    }
+
+                    break;
                 }
             }
+
+            let feedbackDetected = false;
+            for (const selector of feedbackSelectors) {
+                const popup = document.querySelector(selector);
+                if (popup) {
+                    feedbackDetected = true;
+                    sendToast("❌ Resposta errada ou inválida. Pulando...", 2000);
+                    await delay(1000);
+
+                    findAndClickBySelector(skipSelector);
+                    break;
+                }
+            }
+
+            if (!success && !feedbackDetected) {
+                findAndClickBySelector(skipSelector);
+                sendToast("⏭ Pulando questão por falha geral.", 2000);
+            }
         }
+
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
