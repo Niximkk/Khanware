@@ -82,6 +82,7 @@ let skippedByAbsence = false;
                     skippedByAbsence = false;
                 } else {
                     skippedByAbsence = false;
+                    await delay(1000); // previne crash por loop rápido
                 }
                 continue;
             }
@@ -89,6 +90,7 @@ let skippedByAbsence = false;
             if (!correctDetected) {
                 if (isStartButtonVisible()) {
                     sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
+                    await delay(1000); // previne crash por loop rápido
                     continue;
                 }
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
