@@ -35,9 +35,9 @@ function findRetryButton() {
         .find(el => el.textContent?.trim() === retryButtonText);
 }
 
-function isStartButtonVisible() {
+function findStartButton() {
     return Array.from(document.querySelectorAll("button, div"))
-        .some(el => el.textContent?.trim() === startButtonText);
+        .find(el => el.textContent?.trim() === startButtonText);
 }
 
 khanwareDominates = true;
@@ -74,25 +74,22 @@ let skippedByAbsence = false;
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
             const retryButton = findRetryButton();
+            const startButton = findStartButton();
 
             if (retryButton) {
-                if (skippedByAbsence) {
-                    sendToast("🔁 Repetindo questão por erro anterior (ausência de resposta correta).", 2000);
-                    retryButton.click();
-                    skippedByAbsence = false;
-                } else {
-                    skippedByAbsence = false;
-                    await delay(1000); // previne crash por loop rápido
-                }
+                retryButton.click();
+                await delay(1000); // prevenir loop acelerado
+                skippedByAbsence = false;
                 continue;
             }
 
             if (!correctDetected) {
-                if (isStartButtonVisible()) {
-                    sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
-                    await delay(1000); // previne crash por loop rápido
+                if (startButton) {
+                    startButton.click();
+                    await delay(1000); // prevenir loop acelerado
                     continue;
                 }
+
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
