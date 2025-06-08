@@ -55,13 +55,14 @@ khanwareDominates = true;
                 continue;
             }
 
-            const correctDetected = Array.from(document.querySelectorAll("button, div"))
+            // Verifica se existe um div com classe 'paragraph' e conteúdo "Resposta correta."
+            const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
             if (correctDetected) {
                 sendToast("✅ Resposta correta detectada.", 1500);
             } else {
-                sendToast("⏭ Pulando questão por falta de 'Resposta correta'.", 2000);
+                sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
             }
