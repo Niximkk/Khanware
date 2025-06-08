@@ -7,6 +7,7 @@ const baseSelectors = [
 ];
 
 const skipSelector = `[data-testid="exercise-skip-button"]`;
+const confirmSkipSelector = `._15f36dw6`;
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`,
@@ -33,15 +34,18 @@ khanwareDominates = true;
                 sendToast("❌ Resposta errada. Pulando...", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
+                await delay(1000);
+                findAndClickBySelector(confirmSkipSelector);
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
                 feedback = "unanswered";
                 sendToast("⚠️ Pergunta não respondida. Pulando...", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
+                await delay(1000);
+                findAndClickBySelector(confirmSkipSelector);
             } else if (document.querySelector(feedbackSelectors.correct)) {
                 feedback = "correct";
                 sendToast("✅ Resposta correta detectada.", 1500);
-                // Não pula — espera o próximo botão funcionar
             }
 
             if (!feedback) {
