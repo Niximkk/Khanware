@@ -56,7 +56,7 @@ khanwareDominates = true;
             }
 
             const correctDetected = Array.from(document.querySelectorAll("button, div"))
-                .some(el => el.textContent?.trim() === "Resposta correta");
+                .some(el => el.textContent?.trim() === "Resposta correta.");
 
             if (correctDetected) {
                 sendToast("✅ Resposta correta detectada.", 1500);
