@@ -1,16 +1,18 @@
 const baseSelectors = [
-    [data-testid="choice-icon__library-choice-icon"],
-    [data-testid="exercise-check-answer"],
-    [data-testid="exercise-next-question"],
-    ._1udzurba,
-    ._awve9b
+    `[data-testid="choice-icon__library-choice-icon"]`,
+    `[data-testid="exercise-check-answer"]`,
+    `[data-testid="exercise-next-question"]`,
+    `._1udzurba`,
+    `._awve9b`
 ];
 
-const skipSelector = [data-testid="exercise-skip-button"];
+const skipSelector = `[data-testid="exercise-skip-button"]`;
 const confirmSkipButtonText = "Sim, pular";
+const retryButtonText = "Tentar novamente";
+const startButtonText = "Vamos lá";
 const feedbackSelectors = {
-    incorrect: [data-testid="exercise-feedback-popover-incorrect"],
-    unanswered: [data-testid="exercise-feedback-popover-unanswered"]
+    incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
+    unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
 async function waitAndClickConfirmButton(maxWait = 3000) {
@@ -28,7 +30,18 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
     return false;
 }
 
+function clickButtonByText(text) {
+    const btn = Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === text);
+    if (btn) {
+        btn.click();
+        return true;
+    }
+    return false;
+}
+
 khanwareDominates = true;
+let skippedByAbsence = false;
 
 (async () => {
     while (khanwareDominates) {
@@ -42,29 +55,36 @@ khanwareDominates = true;
             }
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
-                sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = false;
                 continue;
             }
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
-                sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = false;
                 continue;
             }
 
-            // Verifica se existe um div com classe 'paragraph' e conteúdo "Resposta correta."
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            if (correctDetected) {
-                sendToast("✅ Resposta correta detectada.", 1500);
-            } else {
-                sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
+            if (clickButtonByText(retryButtonText)) {
+                skippedByAbsence = false;
+                await delay(1000);
+                continue;
+            }
+
+            if (!correctDetected) {
+                if (clickButtonByText(startButtonText)) {
+                    await delay(1000);
+                    continue;
+                }
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = true;
             }
         }
 
