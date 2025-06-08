@@ -64,15 +64,15 @@ khanwareDominates = true;
             }
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
-                findAndClickBySelector(skipSelector);
                 sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
+                findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
                 continue;
             }
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
-                findAndClickBySelector(skipSelector);
                 sendToast("⏭ Pulando questão por falta de 'Resposta correta.'", 2000);
+                findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
                 continue;
             }
