@@ -130,7 +130,7 @@ handleInput(['questionSpoof', 'videoSpoof', 'showAnswers', 'nextRecomendation', 
 handleInput(['customName', 'customPfp'])
 handleInput('autoAnswer', checked => checked && !features.questionSpoof && (document.querySelector('[setting-data="features.questionSpoof"]').checked = features.questionSpoof = true));
 handleInput('autoAnswerDelay', value => value && (featureConfigs.autoAnswerDelay = 4 - value));
-handleInput('Accuracy', value => value && (featureConfigs.autoAnswerDelay = 100 - value));
+handleInput('Accuracy', value => value && (featureConfigs.Accuracy = 100 - value));
 handleInput('darkMode', checked => checked ? (DarkReader.setFetchMethod(window.fetch), DarkReader.enable()) : DarkReader.disable());
 handleInput('onekoJs', checked => { onekoEl = document.getElementById('oneko'); if (onekoEl) {onekoEl.style.display = checked ? null : "none"} });
 
