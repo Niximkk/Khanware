@@ -7,12 +7,28 @@ const baseSelectors = [
 ];
 
 const skipSelector = `[data-testid="exercise-skip-button"]`;
-const confirmSkipSelector = `._1w8pw4wj`;
+const confirmSkipButtonText = "Sim, pular";
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`,
     correct: `[data-testid="exercise-feedback-popover-correct"]`
 };
+
+khanwareDominates = true;
+async function waitAndClickConfirmButton(maxWait = 3000) {
+    const start = Date.now();
+    while (Date.now() - start < maxWait) {
+        const btn = Array.from(document.querySelectorAll("button, div"))
+            .find(el => el.textContent?.trim() === confirmSkipButtonText);
+        if (btn) {
+            btn.click();
+            return true;
+        }
+        await delay(100);
+    }
+    console.warn("⛔ Botão de confirmação não encontrado.");
+    return false;
+}
 
 khanwareDominates = true;
 
@@ -24,7 +40,7 @@ khanwareDominates = true;
             if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
 
             for (const q of selectorsToCheck) {
-                findAndClickBySelector(q); 
+                findAndClickBySelector(q);
             }
 
             let feedback = null;
@@ -34,24 +50,18 @@ khanwareDominates = true;
                 sendToast("❌ Resposta errada. Pulando...", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
-                await delay(1000);
-                findAndClickBySelector(confirmSkipSelector);
+                await waitAndClickConfirmButton();
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
                 feedback = "unanswered";
                 sendToast("⚠️ Pergunta não respondida. Pulando...", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
-                await delay(1000);
-                findAndClickBySelector(confirmSkipSelector);
+                await waitAndClickConfirmButton();
             } else if (document.querySelector(feedbackSelectors.correct)) {
                 feedback = "correct";
                 sendToast("✅ Resposta correta detectada.", 1500);
             }
 
-            if (!feedback) {
-                sendToast("⏭ Pulando questão por falha geral (sem feedback detectado).", 2000);
-                findAndClickBySelector(skipSelector);
-            }
         }
 
         await delay(featureConfigs.autoAnswerDelay * 800);
