@@ -78,7 +78,7 @@ let startClicked = false;
 
             if (hasRetryButton) {
                 if (skippedByAbsence && !retryClicked) {
-                    sendToast("🔁 Repetindo questão por erro anterior (ausência de resposta correta).", 2000);
+
                     await waitAndClickButtonByText(retryButtonText);
                     retryClicked = true;
                     skippedByAbsence = false;
@@ -91,11 +91,11 @@ let startClicked = false;
             if (!correctDetected) {
                 if (hasStartButton) {
                     if (!startClicked) {
-                        sendToast("⏳ Iniciando questão (botão 'Vamos lá' clicado).", 2000);
+
                         await waitAndClickButtonByText(startButtonText);
                         startClicked = true;
                     } else {
-                        sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
+
                     }
                     continue;
                 }
