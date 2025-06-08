@@ -34,12 +34,12 @@ window.features = {
     customBanner: false,
     nextRecomendation: false,
     repeatQuestion: false,
-    Accuracy: false,
     minuteFarmer: false,
     rgbLogo: false
 };
 window.featureConfigs = {
     autoAnswerDelay: 3,
+    Accuracy: 100,
     customUsername: "",
     customPfp: ""
 };
