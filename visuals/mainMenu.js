@@ -1,5 +1,5 @@
 const setFeatureByPath = (path, value) => { let obj = window; const parts = path.split('.'); while (parts.length > 1) obj = obj[parts.shift()]; obj[parts[0]] = value; }
-
+ 
 function addFeature(features) {
     const feature = document.createElement('feature');
     features.forEach(attribute => {
