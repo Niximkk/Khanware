@@ -30,9 +30,9 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-function clickButtonByText(text) {
+function clickButtonByText(buttonText) {
     const btn = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === text);
+        .find(el => el.textContent?.trim() === buttonText);
     if (btn) {
         btn.click();
         return true;
@@ -55,7 +55,6 @@ let skippedByAbsence = false;
             }
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
-                sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
@@ -63,7 +62,6 @@ let skippedByAbsence = false;
             }
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
-                sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
@@ -74,8 +72,8 @@ let skippedByAbsence = false;
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
             if (clickButtonByText(retryButtonText)) {
-                await delay(1000);
                 skippedByAbsence = false;
+                await delay(1000);
                 continue;
             }
 
@@ -84,13 +82,9 @@ let skippedByAbsence = false;
                     await delay(1000);
                     continue;
                 }
-
-                sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
-            } else {
-                sendToast("✅ Resposta correta detectada.", 1500);
             }
         }
 
