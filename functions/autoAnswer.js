@@ -6,7 +6,9 @@ const baseSelectors = [
     `._awve9b`
 ];
 
+const wrongAnswerSelector = `._1bz2tu6k`; // Botão errado identificado
 const skipSelector = `[data-testid="exercise-skip-button"]`;
+
 const feedbackSelectors = [
     `[data-testid="exercise-feedback-popover-incorrect"]`,
     `[data-testid="exercise-feedback-popover-unanswered"]`   
@@ -14,28 +16,41 @@ const feedbackSelectors = [
 
 khanwareDominates = true;
 
+function shouldAnswerCorrectly() {
+    const chance = Math.random() * 100;
+    return chance <= featureConfigs.Accuracy;
+}
+
 (async () => { 
     while (khanwareDominates) {
         if (features.autoAnswer && features.questionSpoof) {
-            
-            const selectorsToCheck = [...baseSelectors];
-
-            if (features.nextRecomendation) selectorsToCheck.push("._hxicrxf");
-            if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
 
             let success = false;
+            let intentionalFail = false;
 
-            for (const q of selectorsToCheck) {
-                if (findAndClickBySelector(q)) {
-                    success = true;
+            if (shouldAnswerCorrectly()) {
+                const selectorsToCheck = [...baseSelectors];
 
-                    const summary = document.querySelector(q + "> div");
-                    if (summary && summary.innerText === "Mostrar resumo") {
-                        sendToast("🎉 Exercício concluído!", 3000);
-                        playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
+                if (features.nextRecomendation) selectorsToCheck.push("._hxicrxf");
+                if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
+
+                for (const q of selectorsToCheck) {
+                    if (findAndClickBySelector(q)) {
+                        success = true;
+
+                        const summary = document.querySelector(q + "> div");
+                        if (summary && summary.innerText === "Mostrar resumo") {
+                            sendToast("🎉 Exercício concluído!", 3000);
+                            playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
+                        }
+
+                        break;
                     }
-
-                    break;
+                }
+            } else {
+                intentionalFail = findAndClickBySelector(wrongAnswerSelector);
+                if (intentionalFail) {
+                    sendToast("⚠ Simulando resposta errada por acurácia.", 2000);
                 }
             }
 
@@ -52,7 +67,7 @@ khanwareDominates = true;
                 }
             }
 
-            if (!success && !feedbackDetected) {
+            if (!success && !intentionalFail && !feedbackDetected) {
                 findAndClickBySelector(skipSelector);
                 sendToast("⏭ Pulando questão por falha geral.", 2000);
             }
