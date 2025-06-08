@@ -33,12 +33,12 @@ window.features = {
     customBanner: false,
     nextRecomendation: false,
     repeatQuestion: false,
+    Accuracy: false,
     minuteFarmer: false,
     rgbLogo: false
 };
 window.featureConfigs = {
     autoAnswerDelay: 3,
-    Accuracy: 3,
     customUsername: "",
     customPfp: ""
 };
