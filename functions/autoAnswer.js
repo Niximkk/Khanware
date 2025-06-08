@@ -9,12 +9,13 @@ const baseSelectors = [
 const skipSelector = `[data-testid="exercise-skip-button"]`;
 const confirmSkipButtonText = "Sim, pular";
 const retryButtonText = "Tentar novamente";
+const startButtonText = "Vamos lá";
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
-async function waitAndClickConfirmButton(maxWait = 3000) {
+async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
         const btn = Array.from(document.querySelectorAll("button, div"))
@@ -34,6 +35,11 @@ function findRetryButton() {
         .find(el => el.textContent?.trim() === retryButtonText);
 }
 
+function findStartButton() {
+    return Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === startButtonText);
+}
+
 khanwareDominates = true;
 let skippedByAbsence = false;
 
@@ -51,7 +57,7 @@ let skippedByAbsence = false;
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
+                await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
                 continue;
             }
@@ -59,7 +65,7 @@ let skippedByAbsence = false;
             if (document.querySelector(feedbackSelectors.unanswered)) {
                 sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
+                await waitAndClickConfirmSkipButton();
                 skippedByAbsence = false;
                 continue;
             }
@@ -68,10 +74,11 @@ let skippedByAbsence = false;
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
             const retryButton = findRetryButton();
+            const startButton = findStartButton();
 
             if (retryButton) {
                 if (skippedByAbsence) {
-                    sendToast("🔁 Repetindo tentativa por erro anterior (ausência de resposta correta).", 2000);
+                    sendToast("🔁 Repetindo questão por erro anterior (ausência de resposta correta).", 2000);
                     retryButton.click();
                     skippedByAbsence = false;
                 } else {
@@ -81,9 +88,13 @@ let skippedByAbsence = false;
             }
 
             if (!correctDetected) {
-                sendToast("⏭ Pulando por ausência de feedback e de resposta correta.", 2000);
+                if (startButton) {
+                    sendToast("⏳ Aguardando início da questão (botão 'Start' visível).", 2000);
+                    continue;
+                }
+                sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
+                await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
             } else {
                 sendToast("✅ Resposta correta detectada.", 1500);
