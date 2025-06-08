@@ -6,7 +6,7 @@ const baseSelectors = [
     `._awve9b`
 ];
 
-const wrongAnswerSelector = `._1bz2tu6k`; // Botão errado identificado
+const wrongAnswerSelector = `._1bz2tu6k`;
 const skipSelector = `[data-testid="exercise-skip-button"]`;
 
 const feedbackSelectors = [
