@@ -28,33 +28,19 @@ khanwareDominates = true;
                 findAndClickBySelector(q);
             }
 
-            let feedback = null;
-
             if (document.querySelector(feedbackSelectors.incorrect)) {
-                feedback = "incorrect";
-                sendToast("❌ Resposta errada. Pulando...", 2000);
+                sendToast("⏭ Pulando questão por falha geral", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
-                await delay(500); // Aguarda o popup abrir
-                findAndClickBySelector(confirmSkipSelector); // Confirma pulo
+                await delay(500);
+                findAndClickBySelector(confirmSkipSelector);
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
-                feedback = "unanswered";
-                sendToast("⚠️ Pergunta não respondida. Pulando...", 2000);
+                sendToast("⏭ Pulando questão por falha geral", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
                 await delay(500);
                 findAndClickBySelector(confirmSkipSelector);
-            } else if (document.querySelector(feedbackSelectors.correct)) {
-                feedback = "correct";
-                sendToast("✅ Resposta correta detectada.", 1500);
-            }
 
-            if (!feedback) {
-                sendToast("⏭ Pulando questão por falha geral (sem feedback detectado).", 2000);
-                findAndClickBySelector(skipSelector);
-                await delay(500);
-                findAndClickBySelector(confirmSkipSelector);
-            }
         }
 
         await delay(featureConfigs.autoAnswerDelay * 800);
