@@ -7,7 +7,7 @@ const baseSelectors = [
 ];
 
 const skipSelector = `[data-testid="exercise-skip-button"]`;
-const confirmSkipSelector = `._15f36dw6`;
+const confirmSkipSelector = `._1w8pw4wj`;
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`,
