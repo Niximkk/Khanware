@@ -15,29 +15,23 @@ const feedbackSelectors = {
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
-async function waitAndClickConfirmSkipButton(maxWait = 3000) {
+async function waitAndClickButtonByText(buttonText, maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
         const btn = Array.from(document.querySelectorAll("button, div"))
-            .find(el => el.textContent?.trim() === confirmSkipButtonText);
+            .find(el => el.textContent?.trim() === buttonText);
         if (btn) {
             btn.click();
             return true;
         }
         await delay(100);
     }
-    console.warn("⛔ Botão de confirmação não encontrado.");
     return false;
 }
 
-function findRetryButton() {
+function buttonExistsByText(buttonText) {
     return Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === retryButtonText);
-}
-
-function findStartButton() {
-    return Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === startButtonText);
+        .some(el => el.textContent?.trim() === buttonText);
 }
 
 khanwareDominates = true;
@@ -59,7 +53,7 @@ let startClicked = false;
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
+                await waitAndClickButtonByText(confirmSkipButtonText);
                 skippedByAbsence = false;
                 retryClicked = false;
                 startClicked = false;
@@ -69,7 +63,7 @@ let startClicked = false;
             if (document.querySelector(feedbackSelectors.unanswered)) {
                 sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
+                await waitAndClickButtonByText(confirmSkipButtonText);
                 skippedByAbsence = false;
                 retryClicked = false;
                 startClicked = false;
@@ -79,13 +73,13 @@ let startClicked = false;
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            const retryButton = findRetryButton();
-            const startButton = findStartButton();
+            const hasRetryButton = buttonExistsByText(retryButtonText);
+            const hasStartButton = buttonExistsByText(startButtonText);
 
-            if (retryButton) {
+            if (hasRetryButton) {
                 if (skippedByAbsence && !retryClicked) {
                     sendToast("🔁 Repetindo questão por erro anterior (ausência de resposta correta).", 2000);
-                    retryButton.click();
+                    await waitAndClickButtonByText(retryButtonText);
                     retryClicked = true;
                     skippedByAbsence = false;
                 } else if (!skippedByAbsence) {
@@ -95,19 +89,20 @@ let startClicked = false;
             }
 
             if (!correctDetected) {
-                if (startButton) {
+                if (hasStartButton) {
                     if (!startClicked) {
                         sendToast("⏳ Iniciando questão (botão 'Vamos lá' clicado).", 2000);
-                        startButton.click();
+                        await waitAndClickButtonByText(startButtonText);
                         startClicked = true;
                     } else {
                         sendToast("⏳ Aguardando início da questão (botão 'Vamos lá' visível).", 2000);
                     }
                     continue;
                 }
+
                 sendToast("⏭ Pulando por ausência de resposta correta.", 2000);
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
+                await waitAndClickButtonByText(confirmSkipButtonText);
                 skippedByAbsence = true;
                 retryClicked = false;
                 startClicked = false;
