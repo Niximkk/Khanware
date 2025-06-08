@@ -15,28 +15,35 @@ const feedbackSelectors = {
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
-async function waitAndClickConfirmButton(maxWait = 3000) {
-    const start = Date.now();
-    while (Date.now() - start < maxWait) {
-        const btn = Array.from(document.querySelectorAll("button, div"))
-            .find(el => el.textContent?.trim() === confirmSkipButtonText);
-        if (btn) {
-            btn.click();
-            return true;
-        }
-        await delay(100);
+function findAndClickBySelector(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+        element.dispatchEvent(event);
+        return true;
     }
-    console.warn("⛔ Botão de confirmação não encontrado.");
     return false;
 }
 
-function clickButtonByText(text) {
-    const btn = Array.from(document.querySelectorAll("button, div"))
+function findAndClickByText(text) {
+    const element = Array.from(document.querySelectorAll("button, div"))
         .find(el => el.textContent?.trim() === text);
-    if (btn) {
-        btn.click();
+    if (element) {
+        const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+        element.dispatchEvent(event);
         return true;
     }
+    return false;
+}
+
+async function waitAndClickConfirmButton(maxWait = 3000) {
+    const start = Date.now();
+    while (Date.now() - start < maxWait) {
+        const success = findAndClickByText(confirmSkipButtonText);
+        if (success) return true;
+        await delay(100);
+    }
+    console.warn("⛔ Botão de confirmação não encontrado.");
     return false;
 }
 
@@ -71,14 +78,14 @@ let skippedByAbsence = false;
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            if (clickButtonByText(retryButtonText)) {
+            if (findAndClickByText(retryButtonText)) {
                 skippedByAbsence = false;
                 await delay(1000);
                 continue;
             }
 
             if (!correctDetected) {
-                if (clickButtonByText(startButtonText)) {
+                if (findAndClickByText(startButtonText)) {
                     await delay(1000);
                     continue;
                 }
