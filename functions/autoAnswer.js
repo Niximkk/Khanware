@@ -47,19 +47,16 @@ khanwareDominates = true;
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 feedback = "incorrect";
-                sendToast("❌ Resposta errada. Pulando...", 2000);
+                sendToast("⏭ Pulando questão por falha geral", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
                 feedback = "unanswered";
-                sendToast("⚠️ Pergunta não respondida. Pulando...", 2000);
+                sendToast("⏭ Pulando questão por falha geral", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-            } else if (document.querySelector(feedbackSelectors.correct)) {
-                feedback = "correct";
-                sendToast("✅ Resposta correta detectada.", 1500);
             }
 
         }
