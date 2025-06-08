@@ -10,8 +10,7 @@ const skipSelector = `[data-testid="exercise-skip-button"]`;
 const confirmSkipButtonText = "Sim, pular";
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
-    unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`,
-    correct: `[data-testid="exercise-feedback-popover-correct"]`
+    unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
 async function waitAndClickConfirmButton(maxWait = 3000) {
@@ -42,31 +41,29 @@ khanwareDominates = true;
                 findAndClickBySelector(q);
             }
 
-            let feedback = null;
-
             if (document.querySelector(feedbackSelectors.incorrect)) {
-                feedback = "incorrect";
                 sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-            } else if (document.querySelector(feedbackSelectors.unanswered)) {
-                feedback = "unanswered";
+                continue;
+            }
+
+            if (document.querySelector(feedbackSelectors.unanswered)) {
                 sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-            } else {
-                const correctDetected = document.querySelector(feedbackSelectors.correct) ||
-                    Array.from(document.querySelectorAll("button, div"))
-                        .some(el => el.textContent?.trim() === "Resposta correta");
+                continue;
+            }
 
-                if (correctDetected) {
-                    feedback = "correct";
-                    sendToast("✅ Resposta correta detectada.", 1500);
-                } else {
-                    sendToast("⏭ Pulando questão por falta de feedback de acerto.", 2000);
-                    findAndClickBySelector(skipSelector);
-                    await waitAndClickConfirmButton();
-                }
+            const correctDetected = Array.from(document.querySelectorAll("button, div"))
+                .some(el => el.textContent?.trim() === "Resposta correta");
+
+            if (correctDetected) {
+                sendToast("✅ Resposta correta detectada.", 1500);
+            } else {
+                sendToast("⏭ Pulando questão por falta de 'Resposta correta'.", 2000);
+                findAndClickBySelector(skipSelector);
+                await waitAndClickConfirmButton();
             }
         }
 
