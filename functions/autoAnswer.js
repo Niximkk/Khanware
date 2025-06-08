@@ -26,30 +26,52 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
         await delay(100);
     }
     console.warn("⛔ Botão de confirmação não encontrado.");
-
     return false;
 }
 
+khanwareDominates = true;
 
+(async () => {
+    while (khanwareDominates) {
+        if (features.autoAnswer && features.questionSpoof) {
+            const selectorsToCheck = [...baseSelectors];
+            if (features.nextRecomendation) selectorsToCheck.push("._hxicrxf");
+            if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
 
-if (document.querySelector(feedbackSelectors.incorrect)) {
-    feedback = "incorrect";
-    sendToast("⏭ Pulando questão por falha geral", 2000);
-    findAndClickBySelector(skipSelector);
-    const clicked = await waitAndClickConfirmButton();
-    if (!clicked) {
-      sendToast("⛔ Confirmação de pulo não detectada, não pulando.", 3000);
+            for (const q of selectorsToCheck) {
+                findAndClickBySelector(q);
+            }
 
-    }
-} else if (document.querySelector(feedbackSelectors.unanswered)) {
-    feedback = "unanswered";
-    sendToast("⏭ Pulando questão por falha geral", 2000);
-    findAndClickBySelector(skipSelector);
-    const clicked = await waitAndClickConfirmButton();
-    if (!clicked) {
-      sendToast("⛔ Confirmação de pulo não detectada, não pulando.", 3000);
-    }
-}
+            let feedback = null;
+
+            if (document.querySelector(feedbackSelectors.incorrect)) {
+                feedback = "incorrect";
+                sendToast("⏭ Pulando questão por falha geral", 2000);
+                findAndClickBySelector(skipSelector);
+                await waitAndClickConfirmButton();
+            } else if (document.querySelector(feedbackSelectors.unanswered)) {
+                feedback = "unanswered";
+                sendToast("⏭ Pulando questão por falha geral", 2000);
+                findAndClickBySelector(skipSelector);
+                await waitAndClickConfirmButton();
+            } else {
+                // Espera até 6s por feedback de acerto
+                const start = Date.now();
+                while (!document.querySelector(feedbackSelectors.correct) && Date.now() - start < 6000) {
+                    await delay(100);
+                }
+
+                if (document.querySelector(feedbackSelectors.correct)) {
+                    feedback = "correct";
+                    sendToast("✅ Resposta correta detectada.", 1500);
+                } else {
+                    sendToast("⏭ Pulando questão por falta de feedback de acerto.", 2000);
+                    findAndClickBySelector(skipSelector);
+                    await waitAndClickConfirmButton();
+                }
+            }
+        }
+
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
