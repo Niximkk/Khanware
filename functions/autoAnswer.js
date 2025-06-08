@@ -14,7 +14,6 @@ const feedbackSelectors = {
     correct: `[data-testid="exercise-feedback-popover-correct"]`
 };
 
-khanwareDominates = true;
 async function waitAndClickConfirmButton(maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
@@ -28,6 +27,17 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
     }
     console.warn("⛔ Botão de confirmação não encontrado.");
     return false;
+}
+
+async function waitForCorrectFeedback(timeout = 6000) {
+    const start = Date.now();
+    while (Date.now() - start < timeout) {
+        if (document.querySelector(feedbackSelectors.correct)) {
+            return true; // feedback de acerto apareceu
+        }
+        await delay(100);
+    }
+    return false; // não apareceu a tempo
 }
 
 khanwareDominates = true;
@@ -47,18 +57,22 @@ khanwareDominates = true;
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 feedback = "incorrect";
-                sendToast("⏭ Pulando questão por falha geral", 2000);
-                await delay(1000);
-                findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
                 feedback = "unanswered";
+            } else {
+                // Espera até 6 segundos pelo feedback de acerto
+                const correctAppeared = await waitForCorrectFeedback(6000);
+                if (!correctAppeared) {
+                    feedback = "timeout_no_feedback";
+                }
+            }
+
+            if (feedback === "incorrect" || feedback === "unanswered" || feedback === "timeout_no_feedback") {
                 sendToast("⏭ Pulando questão por falha geral", 2000);
                 await delay(1000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
             }
-
         }
 
         await delay(featureConfigs.autoAnswerDelay * 800);
