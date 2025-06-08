@@ -26,7 +26,6 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
         }
         await delay(100);
     }
-    console.warn("⛔ Botão de confirmação não encontrado.");
     return false;
 }
 
