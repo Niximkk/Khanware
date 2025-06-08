@@ -38,6 +38,7 @@ window.features = {
 };
 window.featureConfigs = {
     autoAnswerDelay: 3,
+    Accuracy: 3,
     customUsername: "",
     customPfp: ""
 };
