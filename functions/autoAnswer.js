@@ -15,13 +15,13 @@ const feedbackSelectors = {
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
-async function waitAndClickConfirmSkipButton(maxWait = 3000) {
+async function waitAndClickConfirmButton(maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
-        const btn = Array.from(document.querySelectorAll("button, div"))
+        const el = Array.from(document.querySelectorAll("button, div"))
             .find(el => el.textContent?.trim() === confirmSkipButtonText);
-        if (btn) {
-            btn.click();
+        if (el) {
+            findAndClickBySelector(el);
             return true;
         }
         await delay(100);
@@ -29,18 +29,17 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-function clickButtonByText(buttonText) {
-    const btn = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === buttonText);
-    if (btn) {
-        btn.click();
+function findAndClickByText(text) {
+    const el = Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === text);
+    if (el) {
+        findAndClickBySelector(el);
         return true;
     }
     return false;
 }
 
 khanwareDominates = true;
-let skippedByAbsence = false;
 
 (async () => {
     while (khanwareDominates) {
@@ -55,35 +54,31 @@ let skippedByAbsence = false;
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
-                skippedByAbsence = false;
+                await waitAndClickConfirmButton();
                 continue;
             }
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
-                skippedByAbsence = false;
+                await waitAndClickConfirmButton();
                 continue;
             }
 
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
-            if (clickButtonByText(retryButtonText)) {
-                skippedByAbsence = false;
+            if (findAndClickByText(retryButtonText)) {
                 await delay(1000);
                 continue;
             }
 
             if (!correctDetected) {
-                if (clickButtonByText(startButtonText)) {
+                if (findAndClickByText(startButtonText)) {
                     await delay(1000);
                     continue;
                 }
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
-                skippedByAbsence = true;
+                await waitAndClickConfirmButton();
             }
         }
 
