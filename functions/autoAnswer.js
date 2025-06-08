@@ -46,22 +46,20 @@ khanwareDominates = true;
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 feedback = "incorrect";
-                sendToast("⏭ Pulando questão por falha geral", 2000);
+                sendToast("⏭ Pulando questão por resposta errada.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
             } else if (document.querySelector(feedbackSelectors.unanswered)) {
                 feedback = "unanswered";
-                sendToast("⏭ Pulando questão por falha geral", 2000);
+                sendToast("⏭ Pulando questão não respondida.", 2000);
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
             } else {
-                // Espera até 6s por feedback de acerto
-                const start = Date.now();
-                while (!document.querySelector(feedbackSelectors.correct) && Date.now() - start < 6000) {
-                    await delay(100);
-                }
+                const correctDetected = document.querySelector(feedbackSelectors.correct) ||
+                    Array.from(document.querySelectorAll("button, div"))
+                        .some(el => el.textContent?.trim() === "Resposta correta");
 
-                if (document.querySelector(feedbackSelectors.correct)) {
+                if (correctDetected) {
                     feedback = "correct";
                     sendToast("✅ Resposta correta detectada.", 1500);
                 } else {
