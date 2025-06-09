@@ -64,18 +64,27 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
 }
 
 khanwareDominates = true;
-let hasSkipped = false;
 
 (async () => {
     while (khanwareDominates) {
         if (features.autoAnswer && features.questionSpoof) {
-            [...baseSelectors, ...(features.nextRecomendation ? ["._hxicrxf"] : []), ...(features.repeatQuestion ? ["._ypgawqo"] : [])]
-                .forEach(q => findAndClickBySelector(q));
+            const selectorsToCheck = [...baseSelectors];
+            if (features.nextRecomendation) selectorsToCheck.push("._hxicrxf");
+            if (features.repeatQuestion) selectorsToCheck.push("._ypgawqo");
 
-            if (document.querySelector(feedbackSelectors.incorrect) || document.querySelector(feedbackSelectors.unanswered)) {
+            for (const q of selectorsToCheck) {
+                findAndClickBySelector(q);
+            }
+
+            if (document.querySelector(feedbackSelectors.incorrect)) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
-                hasSkipped = true; // Marca que houve um pulo antes de "Tentar novamente" aparecer
+                continue;
+            }
+
+            if (document.querySelector(feedbackSelectors.unanswered)) {
+                findAndClickBySelector(skipSelector);
+                await waitAndClickConfirmButton();
                 continue;
             }
 
@@ -83,10 +92,7 @@ let hasSkipped = false;
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
             if (clickButtonBySpanText(retryButtonText)) {
-                if (hasSkipped) {
-                    await delay(1000);
-                    hasSkipped = false; // Reseta apenas se uma tentativa foi feita
-                }
+                await delay(1000);
                 continue;
             }
 
