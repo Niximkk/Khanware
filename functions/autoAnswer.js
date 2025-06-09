@@ -91,8 +91,6 @@ let skippedByAbsence = false;
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
-            } else {
-                skippedByAbsence = false;
             }
         }
 
