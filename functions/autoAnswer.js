@@ -33,25 +33,15 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
 
 function clickButtonByText(text) {
     const btn = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === text && !el.disabled && el.offsetParent !== null);
-
+        .find(el => el.textContent?.trim() === text);
     if (btn) {
-        const evOpts = { bubbles: true, cancelable: true, composed: true };
-
-        btn.dispatchEvent(new PointerEvent("pointerdown", evOpts));
-        btn.dispatchEvent(new PointerEvent("pointerup", evOpts));
-        btn.dispatchEvent(new MouseEvent("mousedown", evOpts));
-        btn.dispatchEvent(new MouseEvent("mouseup", evOpts));
-        btn.dispatchEvent(new MouseEvent("click", evOpts));
-
-        console.log(`Clicking "${text}" using pointer + mouse events`);
+        btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         return true;
     }
-
     return false;
 }
-
-
 
 setInterval(() => {
     console.log("skippedByAbsence:", skippedByAbsence);
@@ -74,19 +64,16 @@ let skippedByAbsence = false;
             const retryClicked = clickButtonByText(retryButtonText);
             const startClicked = clickButtonByText(startButtonText);
 
+            if (startClicked) {
+                skippedByAbsence = false;
+                await delay(1000);
+                continue;
+            }
+
             if (retryClicked) {
                 await delay(1000);
                 continue;
             }
-
-            if (startClicked) {
-                skippedByAbsence = false; 
-                await delay(1000);
-                continue;
-            }
-
-   
-
 
             if (document.querySelector(feedbackSelectors.incorrect) || document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
