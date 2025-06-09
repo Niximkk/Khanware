@@ -60,11 +60,11 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
         await delay(100);
     }
     console.warn("⛔ Botão de confirmação não encontrado.");
-    console.warn("v2");
     return false;
 }
 
 khanwareDominates = true;
+let skippedByAbsence = false;
 
 (async () => {
     while (khanwareDominates) {
@@ -75,36 +75,46 @@ khanwareDominates = true;
 
             for (const q of selectorsToCheck) {
                 findAndClickBySelector(q);
-
             }
+
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = true;
                 continue;
             }
+
 
             if (document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = true;
                 continue;
             }
 
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
+
             if (clickButtonBySpanText(retryButtonText)) {
+                skippedByAbsence = false;
                 await delay(1000);
                 continue;
             }
 
+
             if (!correctDetected) {
                 if (clickButtonBySpanText(startButtonText)) {
+                    skippedByAbsence = false;
                     await delay(1000);
                     continue;
                 }
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmButton();
+                skippedByAbsence = true;
+            } else {
+                skippedByAbsence = false;
             }
         }
 
