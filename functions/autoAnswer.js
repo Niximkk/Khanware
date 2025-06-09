@@ -97,11 +97,12 @@ let skippedByAbsence = false;
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
 
-            if (clickButtonBySpanText(retryButtonText)) {
-                skippedByAbsence = false;
-                await delay(1000);
-                continue;
+            if (skippedByAbsence && clickButtonBySpanText(retryButtonText)) {
+              skippedByAbsence = false;
+              await delay(1000);
+              continue;
             }
+
 
 
             if (!correctDetected) {
