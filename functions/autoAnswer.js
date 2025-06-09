@@ -36,17 +36,21 @@ function clickButtonByText(text) {
         .find(el => el.textContent?.trim() === text && !el.disabled && el.offsetParent !== null);
 
     if (btn) {
-        console.log(`Clicking "${text}"`);
-        btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-        btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        const evOpts = { bubbles: true, cancelable: true, composed: true };
+
+        btn.dispatchEvent(new PointerEvent("pointerdown", evOpts));
+        btn.dispatchEvent(new PointerEvent("pointerup", evOpts));
+        btn.dispatchEvent(new MouseEvent("mousedown", evOpts));
+        btn.dispatchEvent(new MouseEvent("mouseup", evOpts));
+        btn.dispatchEvent(new MouseEvent("click", evOpts));
+
+        console.log(`Clicking "${text}" using pointer + mouse events`);
         return true;
-    } else {
-        console.log(`"${text}" not found or not clickable`);
     }
 
     return false;
 }
+
 
 
 setInterval(() => {
