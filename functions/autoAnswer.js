@@ -81,19 +81,19 @@ let skippedByAbsence = false;
             const retryClicked = clickButtonByText(retryButtonText);
             const startClicked = clickButtonByText(startButtonText);
 
-            if (retryClicked || startClicked) {
-                if (!skippedByAbsence) {
-                    skippedByAbsence = false;
-                    await delay(1000);
-                    continue;
-                }
+            if (retryClicked && !skippedByAbsence) {
+                skippedByAbsence = false;
+                await delay(1000);
+                continue;
             }
 
             if (!correctDetected) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
-            } 
+            } else {
+                skippedByAbsence = false;
+            }
         }
 
         await delay(featureConfigs.autoAnswerDelay * 800);
