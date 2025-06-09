@@ -10,6 +10,7 @@ const skipSelector = [data-testid="exercise-skip-button"];
 const confirmSkipButtonText = "Sim, pular";
 const retryButtonText = "Tentar novamente";
 const startButtonText = "Vamos lá";
+
 const feedbackSelectors = {
     incorrect: [data-testid="exercise-feedback-popover-incorrect"],
     unanswered: [data-testid="exercise-feedback-popover-unanswered"]
@@ -61,14 +62,11 @@ let skippedByAbsence = false;
                 findAndClickBySelector(q);
             }
 
-            if (document.querySelector(feedbackSelectors.incorrect)) {
-                findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
-                skippedByAbsence = true;
-                continue;
-            }
-
-            if (document.querySelector(feedbackSelectors.unanswered)) {
+            // Skip se estiver errado ou não respondido
+            if (
+                document.querySelector(feedbackSelectors.incorrect) ||
+                document.querySelector(feedbackSelectors.unanswered)
+            ) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
@@ -81,12 +79,15 @@ let skippedByAbsence = false;
             const retryClicked = clickButtonByText(retryButtonText);
             const startClicked = clickButtonByText(startButtonText);
 
-            if (retryClicked || startClicked) {
-                if (!skippedByAbsence) {
-                    skippedByAbsence = false;
-                    await delay(1000);
-                    continue;
-                }
+            if (startClicked) {
+                skippedByAbsence = false;
+                await delay(1000);
+                continue;
+            }
+
+            if (retryClicked) {
+                await delay(1000);
+                continue;
             }
 
             if (!correctDetected) {
@@ -101,10 +102,3 @@ let skippedByAbsence = false;
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
-            if (retryClicked || startClicked) {
-                if (!skippedByAbsence) {
-                    skippedByAbsence = false;
-                    await delay(1000);
-                    continue;
-                }
-            }
