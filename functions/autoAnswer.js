@@ -15,53 +15,37 @@ const feedbackSelectors = {
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+async function waitAndClickConfirmSkipButton(maxWait = 3000) {
+    const start = Date.now();
+    while (Date.now() - start < maxWait) {
+        const btn = Array.from(document.querySelectorAll("button, div"))
+            .find(el => el.textContent?.trim() === confirmSkipButtonText);
+        if (btn) {
+            btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+            btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            return true;
+        }
+        await delay(100);
+    }
+    return false;
 }
 
-function findAndClickBySelector(selector) {
-    const el = document.querySelector(selector);
-    if (el) {
-        const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
-        el.dispatchEvent(evt);
+function clickButtonByText(text) {
+    const btn = Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === text);
+    if (btn) {
+        btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         return true;
     }
     return false;
 }
 
-function clickButtonBySpanText(text) {
-    const span = Array.from(document.querySelectorAll("span"))
-        .find(el => el.textContent?.trim() === text);
-    
-    if (span) {
-        const button = span.closest("button");
-        if (button && !button.disabled) {
-            const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
-            button.dispatchEvent(evt);
-            return true;
-        }
-    }
-    return false;
-}
-
-async function waitAndClickConfirmButton(maxWait = 3000) {
-    const start = Date.now();
-    while (Date.now() - start < maxWait) {
-        const span = Array.from(document.querySelectorAll("span"))
-            .find(el => el.textContent?.trim() === confirmSkipButtonText);
-        if (span) {
-            const button = span.closest("button");
-            if (button && !button.disabled) {
-                const evt = new MouseEvent("click", { bubbles: true, cancelable: true });
-                button.dispatchEvent(evt);
-                return true;
-            }
-        }
-        await delay(100);
-    }
-    console.warn("⛔ Botão de confirmação não encontrado.");
-    return false;
-}
+setInterval(() => {
+    console.log("skippedByAbsence:", skippedByAbsence);
+}, 100);
 
 khanwareDominates = true;
 let skippedByAbsence = false;
@@ -77,18 +61,16 @@ let skippedByAbsence = false;
                 findAndClickBySelector(q);
             }
 
-
             if (document.querySelector(feedbackSelectors.incorrect)) {
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
+                await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
                 continue;
             }
 
-
             if (document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
+                await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
                 continue;
             }
@@ -96,24 +78,20 @@ let skippedByAbsence = false;
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
 
+            const retryClicked = clickButtonByText(retryButtonText);
+            const startClicked = clickButtonByText(startButtonText);
 
-            if (skippedByAbsence && clickButtonBySpanText(retryButtonText)) {
-              console.warn(skippedByAbsence);
-              skippedByAbsence = false;
-              await delay(1000);
-              continue;
-            }
-
-
-
-            if (!correctDetected) {
-                if (clickButtonBySpanText(startButtonText)) {
+            if (retryClicked || startClicked) {
+                if (!skippedByAbsence) {
                     skippedByAbsence = false;
                     await delay(1000);
                     continue;
                 }
+            }
+
+            if (!correctDetected) {
                 findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmButton();
+                await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
             } else {
                 skippedByAbsence = false;
