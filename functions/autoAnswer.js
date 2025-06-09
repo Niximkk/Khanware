@@ -102,11 +102,3 @@ let skippedByAbsence = false;
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
-            if (retryClicked || startClicked) {
-                if (!skippedByAbsence) {
-                    skippedByAbsence = false;
-                    await delay(1000);
-                    continue;
-                }
-            }
-
