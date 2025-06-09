@@ -33,15 +33,21 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
 
 function clickButtonByText(text) {
     const btn = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === text);
+        .find(el => el.textContent?.trim() === text && !el.disabled && el.offsetParent !== null);
+
     if (btn) {
+        console.log(`Clicking "${text}"`);
         btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
         btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
         btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
         return true;
+    } else {
+        console.log(`"${text}" not found or not clickable`);
     }
+
     return false;
 }
+
 
 setInterval(() => {
     console.log("skippedByAbsence:", skippedByAbsence);
@@ -65,16 +71,16 @@ let skippedByAbsence = false;
             const startClicked = clickButtonByText(startButtonText);
 
             if (retryClicked) {
-                
                 await delay(1000);
                 continue;
             }
 
             if (startClicked) {
-                skippedByAbsence = false;
+                skippedByAbsence = false; 
                 await delay(1000);
                 continue;
             }
+
    
 
 
