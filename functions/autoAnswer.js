@@ -98,6 +98,7 @@ let skippedByAbsence = false;
 
 
             if (skippedByAbsence && clickButtonBySpanText(retryButtonText)) {
+              console.warn(skippedByAbsence);
               skippedByAbsence = false;
               await delay(1000);
               continue;
