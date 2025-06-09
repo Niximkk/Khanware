@@ -63,12 +63,20 @@ let skippedByAbsence = false;
 
             const retryClicked = clickButtonByText(retryButtonText);
             const startClicked = clickButtonByText(startButtonText);
-            if (retryClicked || startClicked) {
 
+            if (retryClicked) {
+                
                 await delay(1000);
                 continue;
-                skippedByAbsence = false;
             }
+
+            if (startClicked) {
+                skippedByAbsence = false;
+                await delay(1000);
+                continue;
+            }
+   
+
 
             if (document.querySelector(feedbackSelectors.incorrect) || document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
