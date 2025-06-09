@@ -61,14 +61,15 @@ let skippedByAbsence = false;
                 findAndClickBySelector(q);
             }
 
-            if (document.querySelector(feedbackSelectors.incorrect)) {
-                findAndClickBySelector(skipSelector);
-                await waitAndClickConfirmSkipButton();
-                skippedByAbsence = true;
+            const retryClicked = clickButtonByText(retryButtonText);
+            const startClicked = clickButtonByText(startButtonText);
+            if (retryClicked || startClicked) {
+                skippedByAbsence = false;
+                await delay(1000);
                 continue;
             }
 
-            if (document.querySelector(feedbackSelectors.unanswered)) {
+            if (document.querySelector(feedbackSelectors.incorrect) || document.querySelector(feedbackSelectors.unanswered)) {
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
@@ -77,15 +78,6 @@ let skippedByAbsence = false;
 
             const correctDetected = Array.from(document.querySelectorAll("div.paragraph"))
                 .some(el => el.textContent?.trim() === "Resposta correta.");
-
-            const retryClicked = clickButtonByText(retryButtonText);
-            const startClicked = clickButtonByText(startButtonText);
-
-            if (retryClicked && !skippedByAbsence) {
-                skippedByAbsence = false;
-                await delay(1000);
-                continue;
-            }
 
             if (!correctDetected) {
                 findAndClickBySelector(skipSelector);
