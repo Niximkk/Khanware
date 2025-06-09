@@ -74,6 +74,7 @@ khanwareDominates = true;
 
             for (const q of selectorsToCheck) {
                 findAndClickBySelector(q);
+                console.warn("v2");
             }
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
