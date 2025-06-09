@@ -60,6 +60,7 @@ async function waitAndClickConfirmButton(maxWait = 3000) {
         await delay(100);
     }
     console.warn("⛔ Botão de confirmação não encontrado.");
+    console.warn("v2");
     return false;
 }
 
@@ -74,7 +75,7 @@ khanwareDominates = true;
 
             for (const q of selectorsToCheck) {
                 findAndClickBySelector(q);
-                console.warn("v2");
+
             }
 
             if (document.querySelector(feedbackSelectors.incorrect)) {
