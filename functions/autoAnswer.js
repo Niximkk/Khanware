@@ -1,19 +1,19 @@
 const baseSelectors = [
-    [data-testid="choice-icon__library-choice-icon"],
-    [data-testid="exercise-check-answer"],
-    [data-testid="exercise-next-question"],
-    ._1udzurba,
-    ._awve9b
+    `[data-testid="choice-icon__library-choice-icon"]`,
+    `[data-testid="exercise-check-answer"]`,
+    `[data-testid="exercise-next-question"]`,
+    `._1udzurba`,
+    `._awve9b`
 ];
 
-const skipSelector = [data-testid="exercise-skip-button"];
+const skipSelector = `[data-testid="exercise-skip-button"]`;
 const confirmSkipButtonText = "Sim, pular";
 const retryButtonText = "Tentar novamente";
 const startButtonText = "Vamos lá";
 
 const feedbackSelectors = {
-    incorrect: [data-testid="exercise-feedback-popover-incorrect"],
-    unanswered: [data-testid="exercise-feedback-popover-unanswered"]
+    incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
+    unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
 
 async function waitAndClickConfirmSkipButton(maxWait = 3000) {
