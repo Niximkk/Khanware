@@ -1,4 +1,3 @@
-
 const baseSelectors = [
     `[data-testid="choice-icon__library-choice-icon"]`,
     `[data-testid="exercise-check-answer"]`,
@@ -11,10 +10,38 @@ const skipSelector = `[data-testid="exercise-skip-button"]`;
 const confirmSkipButtonText = "Sim, pular";
 const retryButtonText = "Tentar novamente";
 const startButtonText = "Vamos lá";
+
 const feedbackSelectors = {
     incorrect: `[data-testid="exercise-feedback-popover-incorrect"]`,
     unanswered: `[data-testid="exercise-feedback-popover-unanswered"]`
 };
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function findAndClickBySelector(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        element.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        element.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        return true;
+    }
+    return false;
+}
+
+function clickButtonByText(text) {
+    const btn = Array.from(document.querySelectorAll("button, div"))
+        .find(el => el.textContent?.trim() === text);
+    if (btn) {
+        btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        return true;
+    }
+    return false;
+}
 
 async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     const start = Date.now();
@@ -32,20 +59,22 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-function clickButtonByText(text) {
-    const btn = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === text);
-    if (btn) {
-        btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-        btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        return true;
+function repeatIfSkipped() {
+    if (skippedByAbsence) {
+        const repeatButton = document.querySelector("._ypgawqo"); // botão de repetir
+        if (repeatButton) {
+            repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+            repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            console.log("Pergunta repetida após pulo.");
+        } else {
+            console.log("Botão de repetir não encontrado.");
+        }
     }
-    return false;
 }
 
 setInterval(() => {
-    console.log("skippedByAbsence:", skippedByAbsence);
+    console.log("skippedBy..Absence:", skippedByAbsence);
 }, 100);
 
 khanwareDominates = true;
@@ -89,6 +118,8 @@ let skippedByAbsence = false;
                     continue;
                 }
             }
+
+            repeatIfSkipped();
 
             if (!correctDetected) {
                 findAndClickBySelector(skipSelector);
