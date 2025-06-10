@@ -61,7 +61,7 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
 
 function repeatIfSkipped() {
     if (skippedByAbsence) {
-        const repeatButton = document.querySelector("._ypgawqo"); // botão de repetir
+        const repeatButton = document.querySelector("._ypgawqo"); 
         if (repeatButton) {
             repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
             repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
@@ -74,7 +74,7 @@ function repeatIfSkipped() {
 }
 
 setInterval(() => {
-    console.log("skippedBy..Absence:", skippedByAbsence);
+    console.log("skippedBy.Absence:", skippedByAbsence);
 }, 100);
 
 khanwareDominates = true;
@@ -125,8 +125,6 @@ let skippedByAbsence = false;
                 findAndClickBySelector(skipSelector);
                 await waitAndClickConfirmSkipButton();
                 skippedByAbsence = true;
-            } else {
-                skippedByAbsence = false;
             }
         }
 
