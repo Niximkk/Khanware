@@ -1,3 +1,4 @@
+
 const baseSelectors = [
     `[data-testid="choice-icon__library-choice-icon"]`,
     `[data-testid="exercise-check-answer"]`,
@@ -51,7 +52,6 @@ function clickButtonByText(text) {
     return false;
 }
 
-
 async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     const start = Date.now();
     while (Date.now() - start < maxWait) {
@@ -69,21 +69,30 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
 }
 
 function repeatIfSkipped() {
-    if (skippedByAbsence) {
-        const repeatButton = document.querySelector("._ypgawqo"); 
+    if (!skippedByAbsence) return;
+
+    const retried = clickButtonByText(retryButtonText);
+    const started = clickButtonByText(startButtonText);
+    const repeatButton = document.querySelector("._ypgawqo");
+
+    if (retried || started || repeatButton) {
         if (repeatButton) {
             repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
             repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
             repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
             console.log("Pergunta repetida após pulo.");
         } else {
-            console.log("Botão de repetir não encontrado.");
+            console.log("Reinício detectado (retry/start).");
         }
+
+        skippedByAbsence = false;
+    } else {
+        console.log("Não encontrou botão de reinício.");
     }
 }
 
 setInterval(() => {
-    console.log("skippedBy.2Absence:", skippedByAbsence);
+    console.log("skippedByAbsence:", skippedByAbsence);
 }, 100);
 
 khanwareDominates = true;
@@ -121,13 +130,8 @@ let skippedByAbsence = false;
             const startClicked = clickButtonByText(startButtonText);
 
             if (retryClicked || startClicked) {
-                if (!skippedByAbsence) {
-                    skippedByAbsence = false;
-                    await delay(1000);
-                    skippedByAbsence = false;
-                    continue;
-                    skippedByAbsence = false;
-                }
+                await delay(1000);
+                continue;
             }
 
             repeatIfSkipped();
@@ -142,3 +146,4 @@ let skippedByAbsence = false;
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
+
