@@ -83,7 +83,7 @@ function repeatIfSkipped() {
 }
 
 setInterval(() => {
-    console.log("skippedBy.Absence:", skippedByAbsence);
+    console.log("skippedBy.2Absence:", skippedByAbsence);
 }, 100);
 
 khanwareDominates = true;
@@ -124,7 +124,9 @@ let skippedByAbsence = false;
                 if (!skippedByAbsence) {
                     skippedByAbsence = false;
                     await delay(1000);
+                    skippedByAbsence = false;
                     continue;
+                    skippedByAbsence = false;
                 }
             }
 
