@@ -32,16 +32,25 @@ function findAndClickBySelector(selector) {
 }
 
 function clickButtonByText(text) {
-    const btn = Array.from(document.querySelectorAll("button, div"))
-        .find(el => el.textContent?.trim() === text);
-    if (btn) {
-        btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-        btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        return true;
+    const span = Array.from(document.querySelectorAll("span"))
+        .find(el => el.textContent?.trim() === text && el.offsetParent !== null);
+    
+    if (span) {
+        const btn = span.closest("button");
+        if (btn) {
+            btn.scrollIntoView({ behavior: "instant", block: "center" });
+            btn.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            btn.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+            btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            console.log(`Clicou no botão: ${text}`);
+            return true;
+        }
     }
+
+    console.log(`Botão "${text}" não encontrado.`);
     return false;
 }
+
 
 async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     const start = Date.now();
