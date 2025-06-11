@@ -1,4 +1,3 @@
-
 const baseSelectors = [
     `[data-testid="choice-icon__library-choice-icon"]`,
     `[data-testid="exercise-check-answer"]`,
@@ -68,34 +67,28 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-async function repeatIfSkipped() {
-    if (!skippedByAbsence) return; // Não repete se não estiver marcado como skipped
-    
-    // Tenta clicar nos botões "Tentar novamente" e "Vamos lá"
-    const retryClicked = clickButtonByText(retryButtonText);
-    const startClicked = clickButtonByText(startButtonText);
+function repeatIfSkipped() {
+    if (!skippedByAbsence) return;
 
-    if (retryClicked || startClicked) {
-        console.log("Botão de retry/start clicado. Reiniciando a pergunta...");
-        skippedByAbsence = false;
-        return;
-    }
-    
-    // Se os botões padrão não estiverem disponíveis, tenta com o botão alternativo.
+    const retried = clickButtonByText(retryButtonText);
+    const started = clickButtonByText(startButtonText);
     const repeatButton = document.querySelector("._ypgawqo");
-    if (repeatButton) {
-        repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-        repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-        repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        console.log("Pergunta repetida usando o botão alternativo (_ypgawqo).");
+
+    if (retried || started || repeatButton) {
+        if (repeatButton) {
+            repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+            repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+            repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            console.log("Pergunta repetida após pulo.");
+        } else {
+            console.log("Reinício detectado (retry/start).");
+        }
+
         skippedByAbsence = false;
-        return;
+    } else {
+        console.log("Não encontrou botão de reinício.");
     }
-    
-    console.log("Nenhum botão disponível para reiniciar a pergunta.");
 }
-
-
 
 setInterval(() => {
     console.log("skippedByAbsence:", skippedByAbsence);
@@ -152,4 +145,3 @@ let skippedByAbsence = false;
         await delay(featureConfigs.autoAnswerDelay * 800);
     }
 })();
-
