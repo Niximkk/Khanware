@@ -68,28 +68,45 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-function repeatIfSkipped() {
-    if (!skippedByAbsence) return;
+async function repeatQuestionIfSkipped() {
+    if (!skippedByAbsence) return; // Se não estiver marcado como skipped, não faz nada
 
-    const retried = clickButtonByText(retryButtonText);
-    const started = clickButtonByText(startButtonText);
-    const repeatButton = document.querySelector("._ypgawqo");
+    let attempts = 0;
+    const maxAttempts = 5;
 
-    if (retried || started || repeatButton) {
+    while (skippedByAbsence && attempts < maxAttempts) {
+        // Tenta clicar nos botões "Tentar novamente" e "Vamos lá"
+        const retryClicked = clickButtonByText(retryButtonText);
+        const startClicked = clickButtonByText(startButtonText);
+
+        if (retryClicked || startClicked) {
+            console.log("Pergunta repetida com sucesso usando retry/start.");
+            skippedByAbsence = false;
+            break;
+        }
+
+        // Verifica se há um botão de repetição extra (_ypgawqo)
+        const repeatButton = document.querySelector("._ypgawqo");
         if (repeatButton) {
             repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
             repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
             repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-            console.log("Pergunta repetida após pulo.");
-        } else {
-            console.log("Reinício detectado (retry/start).");
+            console.log("Pergunta repetida usando o botão de repetição (_ypgawqo).");
+            skippedByAbsence = false;
+            break;
         }
 
-        skippedByAbsence = false;
-    } else {
-        console.log("Não encontrou botão de reinício.");
+        // Se nenhum botão for encontrado, aguarda e tenta novamente
+        attempts++;
+        console.log(`Tentativa ${attempts}: Botões de reinício não encontrados, tentando novamente...`);
+        await delay(1000);
+    }
+
+    if (skippedByAbsence) {
+        console.log("Não foi possível repetir a pergunta após várias tentativas.");
     }
 }
+
 
 setInterval(() => {
     console.log("skippedByAbsence:", skippedByAbsence);
