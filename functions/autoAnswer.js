@@ -68,44 +68,33 @@ async function waitAndClickConfirmSkipButton(maxWait = 3000) {
     return false;
 }
 
-async function repeatQuestionIfSkipped() {
-    if (!skippedByAbsence) return; // Se não estiver marcado como skipped, não faz nada
+async function repeatIfSkipped() {
+    if (!skippedByAbsence) return; // Não repete se não estiver marcado como skipped
+    
+    // Tenta clicar nos botões "Tentar novamente" e "Vamos lá"
+    const retryClicked = clickButtonByText(retryButtonText);
+    const startClicked = clickButtonByText(startButtonText);
 
-    let attempts = 0;
-    const maxAttempts = 5;
-
-    while (skippedByAbsence && attempts < maxAttempts) {
-        // Tenta clicar nos botões "Tentar novamente" e "Vamos lá"
-        const retryClicked = clickButtonByText(retryButtonText);
-        const startClicked = clickButtonByText(startButtonText);
-
-        if (retryClicked || startClicked) {
-            console.log("Pergunta repetida com sucesso usando retry/start.");
-            skippedByAbsence = false;
-            break;
-        }
-
-        // Verifica se há um botão de repetição extra (_ypgawqo)
-        const repeatButton = document.querySelector("._ypgawqo");
-        if (repeatButton) {
-            repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-            repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-            repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-            console.log("Pergunta repetida usando o botão de repetição (_ypgawqo).");
-            skippedByAbsence = false;
-            break;
-        }
-
-        // Se nenhum botão for encontrado, aguarda e tenta novamente
-        attempts++;
-        console.log(`Tentativa ${attempts}: Botões de reinício não encontrados, tentando novamente...`);
-        await delay(1000);
+    if (retryClicked || startClicked) {
+        console.log("Botão de retry/start clicado. Reiniciando a pergunta...");
+        skippedByAbsence = false;
+        return;
     }
-
-    if (skippedByAbsence) {
-        console.log("Não foi possível repetir a pergunta após várias tentativas.");
+    
+    // Se os botões padrão não estiverem disponíveis, tenta com o botão alternativo.
+    const repeatButton = document.querySelector("._ypgawqo");
+    if (repeatButton) {
+        repeatButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        repeatButton.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+        repeatButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        console.log("Pergunta repetida usando o botão alternativo (_ypgawqo).");
+        skippedByAbsence = false;
+        return;
     }
+    
+    console.log("Nenhum botão disponível para reiniciar a pergunta.");
 }
+
 
 
 setInterval(() => {
