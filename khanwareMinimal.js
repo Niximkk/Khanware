@@ -114,8 +114,7 @@ function setupMain(){
     /* AutoAnswer */
     (function () {
         const baseSelectors = [
-            `[data-testid="choice-icon__library-choice-icon"]`,
-            `[data-testid="exercise-check-answer"]`, 
+            `[data-testid="choice-icon__library-choice-icon"]`, 
             `[data-testid="exercise-next-question"]`, 
             `._1udzurba`,
             `._awve9b`
