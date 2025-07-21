@@ -1,7 +1,8 @@
 const ver = "V3.1.2";
 let isDev = false;
 
-const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
+const repoPath = `https://raw.githubusercontent.com/LuizzLoL/Khanware/refs/heads/${isDev ? "Adicionado-safe-skip-e-umas-coisinhas-ai/" : "Adicionado-safe-skip-e-umas-coisinhas-ai/"}`;
+//`https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`; coloque isso de novo depois, mudado apenas para testar
 
 let device = {
     mobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobile|Tablet|Kindle|Silk|PlayBook|BB10/i.test(navigator.userAgent),
@@ -38,6 +39,7 @@ window.features = {
 };
 window.featureConfigs = {
     autoAnswerDelay: 3,
+    Accuracy: 100,
     customUsername: "",
     customPfp: ""
 };
