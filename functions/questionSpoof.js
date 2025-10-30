@@ -16,7 +16,7 @@ window.fetch = async function(input, init) {
     const url = input instanceof Request ? input.url : input;
     let body = input instanceof Request ? await input.clone().text() : init?.body;
     
-    if (url.includes('getAssessmentItem') && body) {
+    if (features.questionSpoof && url.includes('getAssessmentItem') && body) {
         const res = await originalFetch.apply(this, arguments);
         const clone = res.clone();
         
@@ -88,7 +88,7 @@ window.fetch = async function(input, init) {
         return res;
     }
     
-    if (body?.includes('"operationName":"attemptProblem"')) {
+    if (features.questionSpoof && body?.includes('"operationName":"attemptProblem"')) {
         try {
             let bodyObj = JSON.parse(body);
             const itemId = bodyObj.variables?.input?.assessmentItemId;
