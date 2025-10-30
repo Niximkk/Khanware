@@ -1,6 +1,9 @@
 # 🌿 Khanware
 ### The most advanced Khan Academy cheat.
 
+> 💠 Doação via pix:
+> https://pixie.gg/nixyy
+
 🙂 Stable:
 ```js
 javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/main/Khanware.js").then(t=>t.text()).then(eval);
