@@ -3,8 +3,7 @@ const phrases = [
     "🤍 Made by [**@im.nix**](https://e-z.bio/sounix).",
     "☄️ By [**Niximkk/khanware**](https://github.com/Niximkk/khanware/).",
     "🌟 Star the project on [GitHub](https://github.com/Niximkk/khanware/)!",
-    "🦢 Nix é lindo e maravilhoso!",
-    "💠 Doe para o dev [**Aqui**](https://pixie.gg/nixyy)!"
+    "🦢 Nix é lindo e maravilhoso!"
 ];
 
 const originalFetch = window.fetch;
@@ -62,7 +61,7 @@ window.fetch = async function(input, init) {
             
             if (itemData.question.content?.[0] === itemData.question.content[0].toUpperCase()) {
                 itemData.answerArea = { calculator: false, chi2Table: false, periodicTable: false, tTable: false, zTable: false };
-                itemData.question.content = phrases[Math.floor(Math.random() * phrases.length)] +"\n\n**Onde você deve obter seus scripts?**" + `[[☃ radio 1]]`;
+                itemData.question.content = phrases[Math.floor(Math.random() * phrases.length)] + "\n\n**Onde você deve obter seus scripts?**" + `[[☃ radio 1]]`+ `\n\n**💎 Quer ter a sua mensagem lida para TODOS utilizando o Khanware?** \nFaça uma [Donate Aqui](https://livepix.gg/nixyy)!` ;
                 itemData.question.widgets = {
                     "radio 1": {
                         type: "radio", alignment: "default", static: false, graded: true,
