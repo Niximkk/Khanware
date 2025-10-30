@@ -2,7 +2,7 @@
 ### The most advanced Khan Academy cheat.
 
 > 💠 Doação via pix:
-> https://pixie.gg/nixyy
+> https://livepix.gg/nixyy
 
 🙂 Stable:
 ```js
