@@ -1,7 +1,7 @@
 const ver = "V3.1.2";
 let isDev = false;
 
-const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
+const repoPath = `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev/" : "main/"}`;
 
 let device = {
     mobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobile|Tablet|Kindle|Silk|PlayBook|BB10/i.test(navigator.userAgent),
@@ -190,4 +190,5 @@ loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
 @antonio77xs
 @marcus.floriano.oliveira
 */
+
 
