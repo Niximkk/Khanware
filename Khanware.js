@@ -1,4 +1,4 @@
-const ver = "V3.2.0";
+const ver = "V3.2.1";
 let isDev = false;
 
 const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
@@ -76,6 +76,7 @@ async function loadCss(url) { return new Promise((resolve) => { const link = doc
 function setupMenu() {
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
+    loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
     if(isDev) loadScript(repoPath+'visuals/devTab.js', 'devTab');
 }
 
