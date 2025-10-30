@@ -2,7 +2,7 @@ const pixContainer = document.createElement('div');
 pixContainer.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:9999;width:min(400px,95vw);overflow:hidden;background:transparent;pointer-events:none';
 
 const qrContainer = document.createElement('div');
-qrContainer.style.cssText = 'position:fixed;bottom:0px;right:0px;z-index:9999;height:225px;overflow:hidden;background:transparent;pointer-events:none';
+qrContainer.style.cssText = 'position:fixed;bottom:60px;right:0px;z-index:9999;height:225px;overflow:hidden;background:transparent;pointer-events:none';
 
 const donateIframe = document.createElement('iframe');
 donateIframe.src = 'https://widget.livepix.gg/embed/3b6bbab3-3803-4575-a571-e203724de8af';
