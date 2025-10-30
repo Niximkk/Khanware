@@ -76,7 +76,7 @@ async function loadCss(url) { return new Promise((resolve) => { const link = doc
 function setupMenu() {
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
-    //loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
+    loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
     if(isDev) loadScript(repoPath+'visuals/devTab.js', 'devTab');
 }
 
@@ -96,7 +96,7 @@ function setupMain(){
 showSplashScreen();
 
 loadScript('https://raw.githubusercontent.com/adryd325/oneko.js/refs/heads/main/oneko.js', 'onekoJs').then(() => { onekoEl = document.getElementById('oneko'); onekoEl.style.backgroundImage = "url('https://raw.githubusercontent.com/adryd325/oneko.js/main/oneko.gif')"; onekoEl.style.display = "none"; });
-loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.92/darkreader.min.js', 'darkReaderPlugin').then(()=>{ DarkReader.setFetchMethod(window.fetch); DarkReader.enable(); })
+loadScript('https://cdn.jsdelivr.net/npm/darkreader@latest/darkreader.min.js', 'darkReaderPlugin').then(()=>{ DarkReader.setFetchMethod(window.fetch); DarkReader.enable(); })
 loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css', 'toastifyCss');
 loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
 .then(async () => {
@@ -190,5 +190,6 @@ loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
 @antonio77xs
 @marcus.floriano.oliveira
 */
+
 
 
