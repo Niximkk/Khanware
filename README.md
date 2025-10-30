@@ -7,7 +7,7 @@ javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/
 ```
 🔧 Dev (beta):
 ```js
-javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/main/Khanware.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/dev/Khanware.js").then(t=>t.text()).then(eval);
 ```
 🪶 Minimal (beta):
 ```js
