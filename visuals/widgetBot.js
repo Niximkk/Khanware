@@ -1,3 +1,5 @@
+// Rest in piss wont be missed
+
 if(!device.mobile) {
     const script = Object.assign(document.createElement('script'), {
         src: 'https://cdn.jsdelivr.net/npm/@widgetbot/crate@3',

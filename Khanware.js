@@ -1,7 +1,7 @@
 const ver = "V3.1.2";
 let isDev = false;
 
-const repoPath = `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev/" : "main/"}`;
+const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
 
 let device = {
     mobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobile|Tablet|Kindle|Silk|PlayBook|BB10/i.test(navigator.userAgent),
@@ -76,7 +76,6 @@ async function loadCss(url) { return new Promise((resolve) => { const link = doc
 function setupMenu() {
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
-    loadScript(repoPath+'visuals/widgetBot.js', 'widgetBot');
     if(isDev) loadScript(repoPath+'visuals/devTab.js', 'devTab');
 }
 

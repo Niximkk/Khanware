@@ -1,17 +1,20 @@
 # 🌿 Khanware
 ### The most advanced Khan Academy cheat.
 
+> 💠 Doação via pix:
+> https://pixie.gg/nixyy
+
 🙂 Stable:
 ```js
-javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@main/Khanware.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/main/Khanware.js").then(t=>t.text()).then(eval);
 ```
 🔧 Dev (beta):
 ```js
-javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@dev/Khanware.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/dev/Khanware.js").then(t=>t.text()).then(eval);
 ```
 🪶 Minimal (beta):
 ```js
-javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@main/khanwareMinimal.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/main/khanwareMinimal.js").then(t=>t.text()).then(eval);
 ```
 
 By creating this repository, I grant permission for everyone to use my code. However, since it is licensed under the GPL, any modifications or distributions must also be open source.
