@@ -16,3 +16,5 @@ plppdo.on('domChanged', () => {
         khanLogo.style.animation = 'colorShift 5s infinite';
     }
 })
+
+// Why is this a thing?
