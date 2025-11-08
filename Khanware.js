@@ -1,4 +1,4 @@
-const ver = "V3.2.3";
+const ver = "V3.2.4";
 let isDev = false;
 
 const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
@@ -77,6 +77,7 @@ function setupMenu() {
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
     loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
+    loadScript(repoPath+'visuals/viewCounter.js', 'viewCounter');
     if(isDev) loadScript(repoPath+'visuals/devTab.js', 'devTab');
 }
 
@@ -190,6 +191,3 @@ loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
 @antonio77xs
 @marcus.floriano.oliveira
 */
-
-
-
