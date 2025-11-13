@@ -8,6 +8,11 @@ const widgets = {
         id: '639dd918-b0d3-48d5-a1f4-dff124ce3117',
         container: 'position:fixed;bottom:60px;right:0px;z-index:9999;height:225px;overflow:hidden;background:transparent;pointer-events:none',
         iframe: 'width:400px;height:600px;border:none;transform:scale(0.45);transform-origin:top right;background:transparent;color-scheme:normal !important;pointer-events:none'
+    },
+    donators: {
+        id: 'a5e65526-1979-4035-9f10-7666fd2632bb',
+        container: 'position:fixed;top:50px;left:20px;z-index:9999;width:200px;overflow:hidden;background:transparent;pointer-events:none',
+        iframe: 'width:300px;height:150px;border:none;transform:scale(0.5);transform-origin:top left;background:transparent;color-scheme:normal !important;pointer-events:none'
     }
 };
 
@@ -29,10 +34,13 @@ const pixContainer = createWidget(widgets.donation);
 document.body.appendChild(pixContainer);
 
 let qrContainer;
+let donatorsContainer;
 
 if (!device.mobile) {
     qrContainer = createWidget(widgets.qr);
     document.body.appendChild(qrContainer);
+    donatorsContainer = createWidget(widgets.donators);
+    document.body.appendChild(donatorsContainer);
 }
 
 plppdo.on('domChanged', () => {
