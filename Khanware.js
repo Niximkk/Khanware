@@ -1,4 +1,4 @@
-const ver = "V3.2.5";
+const ver = "V3.2.6";
 let isDev = false;
 
 const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
@@ -59,10 +59,10 @@ const plppdo = new EventEmitter();
 new MutationObserver((mutationsList) => { for (let mutation of mutationsList) if (mutation.type === 'childList') plppdo.emit('domChanged'); }).observe(document.body, { childList: true, subtree: true });
 
 /* Misc Functions */
-window.debug = function(text) { /* QuickFix */}
+window.debug = function(text) {/* Hi, im just a "this exists", i am soon going to be replaced with some bullshit from /visuals/devTab.js. */}
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const playAudio = url => { const audio = new Audio(url); audio.play(); debug(`🔊 Playing audio from ${url}`); };
-const findAndClickBySelector = selector => { const element = document.querySelector(selector); if (element) { element.click(); sendToast(`⭕ Pressionando ${selector}...`, 1000); } };
+const findAndClickBySelector = selector => { const element = document.querySelector(selector); if (element) { element.click(); debug(`⭕ Pressing ${selector}`); } };
 
 function sendToast(text, duration=5000, gravity='bottom') { Toastify({ text: text, duration: duration, gravity: gravity, position: "center", stopOnFocus: true, style: { background: "#000000" } }).showToast(); debug(text); };
 

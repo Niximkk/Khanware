@@ -1,9 +1,8 @@
 const baseSelectors = [
-    `[data-testid="choice-icon__library-choice-icon"]`,
+    `.perseus_hm3uu-sq`,
     `[data-testid="exercise-check-answer"]`, 
     `[data-testid="exercise-next-question"]`, 
-    `._1udzurba`,
-    `._awve9b`
+    `._1wi2tma4`
 ];
 
 khanwareDominates = true;
@@ -14,8 +13,8 @@ khanwareDominates = true;
             
             const selectorsToCheck = [...baseSelectors];
 
-            if (features.nextRecomendation) baseSelectors.push("._hxicrxf")
-            if (features.repeatQuestion) baseSelectors.push("._ypgawqo");
+            if (features.nextRecomendation) selectorsToCheck.push("._g9riz5o")
+            if (features.repeatQuestion) selectorsToCheck.push("._10goqnzn");
 
             for (const q of selectorsToCheck) {
                 findAndClickBySelector(q);
