@@ -10,6 +10,10 @@ const createCounter = (config) => {
     const container = document.createElement('div');
     container.style.cssText = config.container;
     
+    if (device.mobile) {
+        container.style.display = 'none';
+    }
+    
     const img = document.createElement('img');
     img.src = config.url;
     img.alt = 'Contador de visitas';
@@ -19,7 +23,5 @@ const createCounter = (config) => {
     return container;
 };
 
-if (!device.mobile) {
-    const counterContainer = createCounter(visitorCounter.config);
-    document.body.appendChild(counterContainer);
-}
+const counterContainer = createCounter(visitorCounter.config);
+document.body.appendChild(counterContainer);
