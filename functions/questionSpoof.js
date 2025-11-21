@@ -15,13 +15,13 @@ window.fetch = async function(input, init) {
     const url = input instanceof Request ? input.url : input;
     let body = input instanceof Request ? await input.clone().text() : init?.body;
     
-    if (features.questionSpoof && url.includes('getAssessmentItem') && body) {
+    if (features.questionSpoof && url.includes('getAssessmentItemById') && body) {
         const res = await originalFetch.apply(this, arguments);
         const clone = res.clone();
         
         try {
             const data = await clone.json();
-            const item = data?.data?.assessmentItem?.item;
+            const item = data?.data?.assessmentItemById?.item;
             if (!item?.itemData) return res;
             
             let itemData = JSON.parse(item.itemData);
@@ -77,7 +77,7 @@ window.fetch = async function(input, init) {
                 };
                 
                 const modified = { ...data };
-                modified.data.assessmentItem.item.itemData = JSON.stringify(itemData);
+                modified.data.assessmentItemById.item.itemData = JSON.stringify(itemData);
                 sendToast("🔓 Questão exploitada.", 750);
                 return new Response(JSON.stringify(modified), { 
                     status: res.status, statusText: res.statusText, headers: res.headers 
