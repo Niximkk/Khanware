@@ -15,13 +15,22 @@ window.fetch = async function(input, init) {
     const url = input instanceof Request ? input.url : input;
     let body = input instanceof Request ? await input.clone().text() : init?.body;
     
-    if (features.questionSpoof && url.includes('getAssessmentItemById') && body) {
+    const isAssessmentEndpoint = url.includes('getAssessmentItemById') || url.includes('getAssessmentItemByProblemNumber');
+    
+    if (features.questionSpoof && isAssessmentEndpoint && body) {
         const res = await originalFetch.apply(this, arguments);
         const clone = res.clone();
         
         try {
             const data = await clone.json();
-            const item = data?.data?.assessmentItemById?.item;
+            
+            let item;
+            if (url.includes('getAssessmentItemById')) {
+                item = data?.data?.assessmentItemById?.item;
+            } else if (url.includes('getAssessmentItemByProblemNumber')) {
+                item = data?.data?.assessmentItemByProblemNumber?.item;
+            }
+            
             if (!item?.itemData) return res;
             
             let itemData = JSON.parse(item.itemData);
@@ -77,7 +86,13 @@ window.fetch = async function(input, init) {
                 };
                 
                 const modified = { ...data };
-                modified.data.assessmentItemById.item.itemData = JSON.stringify(itemData);
+                
+                if (url.includes('getAssessmentItemById')) {
+                    modified.data.assessmentItemById.item.itemData = JSON.stringify(itemData);
+                } else if (url.includes('getAssessmentItemByProblemNumber')) {
+                    modified.data.assessmentItemByProblemNumber.item.itemData = JSON.stringify(itemData);
+                }
+                
                 sendToast("🔓 Questão exploitada.", 750);
                 return new Response(JSON.stringify(modified), { 
                     status: res.status, statusText: res.statusText, headers: res.headers 
