@@ -54,7 +54,17 @@ function setupMain(){
                 
                 try {
                     const data = await clone.json();
-                    const item = data?.data?.assessmentItem?.item;
+
+                    let item = null;
+                    if (data?.data) {
+                        for (const key in data.data) {
+                            if (data.data[key]?.item) {
+                                item = data.data[key].item;
+                                break;
+                            }
+                        }
+                    }
+                    
                     if (!item?.itemData) return res;
                     
                     let itemData = JSON.parse(item.itemData);
@@ -94,7 +104,7 @@ function setupMain(){
                     
                     if (itemData.question.content?.[0] === itemData.question.content[0].toUpperCase()) {
                         itemData.answerArea = { calculator: false, chi2Table: false, periodicTable: false, tTable: false, zTable: false };
-                        itemData.question.content = phrases[Math.floor(Math.random() * phrases.length)] + "\n\n**Onde você deve obter seus scripts?**" + `[[☃ radio 1]]`+ `\n\n**💎 Quer ter a sua mensagem lida para TODOS utilizando o Khanware?** \nFaça uma [Donate Aqui](https://livepix.gg/nixyy)! (APENAS NA VERSÃO FULL)` ;
+                        itemData.question.content = phrases[Math.floor(Math.random() * phrases.length)] + "\n\n**Onde você deve obter seus scripts?**" + `[[☃ radio 1]]`+ `\n\n**💎 Quer ter a sua mensagem lida para TODOS utilizando o Khanware?** \nFaça uma [Donate Aqui](https://livepix.gg/nixyy)!` ;
                         itemData.question.widgets = {
                             "radio 1": {
                                 type: "radio", alignment: "default", static: false, graded: true,
@@ -110,7 +120,16 @@ function setupMain(){
                         };
                         
                         const modified = { ...data };
-                        modified.data.assessmentItem.item.itemData = JSON.stringify(itemData);
+
+                        if (modified.data) {
+                            for (const key in modified.data) {
+                                if (modified.data[key]?.item?.itemData) {
+                                    modified.data[key].item.itemData = JSON.stringify(itemData);
+                                    break;
+                                }
+                            }
+                        }
+                        
                         sendToast("🔓 Questão exploitada.", 750);
                         return new Response(JSON.stringify(modified), { 
                             status: res.status, statusText: res.statusText, headers: res.headers 
@@ -234,7 +253,7 @@ function setupMain(){
                         playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
                     }
                 }
-                await delay(featureConfigs.autoAnswerDelay * 800);
+                await delay(800);
             }
         })();
     })();
