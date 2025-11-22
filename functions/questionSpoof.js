@@ -15,20 +15,20 @@ window.fetch = async function(input, init) {
     const url = input instanceof Request ? input.url : input;
     let body = input instanceof Request ? await input.clone().text() : init?.body;
     
-    const isAssessmentEndpoint = url.includes('getAssessmentItemById') || url.includes('getAssessmentItemByProblemNumber');
-    
-    if (features.questionSpoof && isAssessmentEndpoint && body) {
+    if (features.questionSpoof && url.includes('getAssessmentItem') && body) {
         const res = await originalFetch.apply(this, arguments);
         const clone = res.clone();
         
         try {
             const data = await clone.json();
             
-            let item;
-            if (url.includes('getAssessmentItemById')) {
-                item = data?.data?.assessmentItemById?.item;
-            } else if (url.includes('getAssessmentItemByProblemNumber')) {
-                item = data?.data?.assessmentItemByProblemNumber?.item;
+            const queryMatch = url.match(/get(\w+)/i);
+            if (queryMatch && modified.data) {
+                const queryName = queryMatch[1].charAt(0).toLowerCase() + queryMatch[1].slice(1);
+                
+                if (modified.data[queryName]?.item?.itemData) {
+                    modified.data[queryName].item.itemData = JSON.stringify(itemData);
+                }
             }
             
             if (!item?.itemData) return res;
@@ -86,11 +86,14 @@ window.fetch = async function(input, init) {
                 };
                 
                 const modified = { ...data };
-                
-                if (url.includes('getAssessmentItemById')) {
-                    modified.data.assessmentItemById.item.itemData = JSON.stringify(itemData);
-                } else if (url.includes('getAssessmentItemByProblemNumber')) {
-                    modified.data.assessmentItemByProblemNumber.item.itemData = JSON.stringify(itemData);
+
+                const queryMatch = url.match(/get(\w+)/i);
+                if (queryMatch && modified.data) {
+                    const queryName = queryMatch[1].charAt(0).toLowerCase() + queryMatch[1].slice(1);
+                    
+                    if (modified.data[queryName]?.item?.itemData) {
+                        modified.data[queryName].item.itemData = JSON.stringify(itemData);
+                    }
                 }
                 
                 sendToast("🔓 Questão exploitada.", 750);
