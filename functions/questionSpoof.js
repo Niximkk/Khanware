@@ -21,13 +21,14 @@ window.fetch = async function(input, init) {
         
         try {
             const data = await clone.json();
-            
-            const queryMatch = url.match(/get(\w+)/i);
-            if (queryMatch && modified.data) {
-                const queryName = queryMatch[1].charAt(0).toLowerCase() + queryMatch[1].slice(1);
-                
-                if (modified.data[queryName]?.item?.itemData) {
-                    modified.data[queryName].item.itemData = JSON.stringify(itemData);
+
+            let item = null;
+            if (data?.data) {
+                for (const key in data.data) {
+                    if (data.data[key]?.item) {
+                        item = data.data[key].item;
+                        break;
+                    }
                 }
             }
             
@@ -87,12 +88,12 @@ window.fetch = async function(input, init) {
                 
                 const modified = { ...data };
 
-                const queryMatch = url.match(/get(\w+)/i);
-                if (queryMatch && modified.data) {
-                    const queryName = queryMatch[1].charAt(0).toLowerCase() + queryMatch[1].slice(1);
-                    
-                    if (modified.data[queryName]?.item?.itemData) {
-                        modified.data[queryName].item.itemData = JSON.stringify(itemData);
+                if (modified.data) {
+                    for (const key in modified.data) {
+                        if (modified.data[key]?.item?.itemData) {
+                            modified.data[key].item.itemData = JSON.stringify(itemData);
+                            break;
+                        }
                     }
                 }
                 
