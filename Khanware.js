@@ -113,7 +113,7 @@ function setupMain(){
 showSplashScreen();
 initializeRepoPath();
 
-loadScript('https://raw.githubusercontent.com/adryd325/oneko.js/refs/heads/main/oneko.js', 'onekoJs').then(() => { onekoEl = document.getElementById('oneko'); onekoEl.style.backgroundImage = "url('https://raw.githubusercontent.com/adryd325/oneko.js/main/oneko.gif')"; onekoEl.style.display = "none"; });
+loadScript('https://cdn.jsdelivr.net/gh/adryd325/oneko.js@master/oneko.js', 'onekoJs').then(() => { onekoEl = document.getElementById('oneko'); onekoEl.style.backgroundImage = "url('https://cdn.jsdelivr.net/gh/adryd325/oneko.js@master/oneko.gif')"; onekoEl.style.display = "none"; });
 loadScript('https://cdn.jsdelivr.net/npm/darkreader@latest/darkreader.min.js', 'darkReaderPlugin').then(()=>{ DarkReader.setFetchMethod(window.fetch); DarkReader.enable(); })
 loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css', 'toastifyCss');
 loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
