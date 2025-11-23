@@ -1,7 +1,12 @@
 const ver = "V3.2.10";
 let isDev = false;
 
-const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
+let repoPath;
+
+const availableCDNs = [
+    `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`,
+    `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev" : "latest"}/`
+];
 
 let device = {
     mobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobile|Tablet|Kindle|Silk|PlayBook|BB10/i.test(navigator.userAgent),
@@ -72,6 +77,17 @@ async function hideSplashScreen() { splashScreen.style.opacity = '0'; setTimeout
 async function loadScript(url, label) { return fetch(url).then(response => response.text()).then(script => { loadedPlugins.push(label); eval(script); }); }
 async function loadCss(url) { return new Promise((resolve) => { const link = document.createElement('link'); link.rel = 'stylesheet'; link.type = 'text/css'; link.href = url; link.onload = () => resolve(); document.head.appendChild(link); }); }
 
+/* Repo Fallback */
+async function initializeRepoPath() {
+    for (const cdn of availableCDNs) {
+        try {
+            const response = await fetch(cdn + 'Khanware.js', { method: 'HEAD' });
+            if (response.ok) { repoPath = cdn; return; }
+        } catch {}
+    }
+    console.log('The entire internet is down for some reason. God help us all...');
+}
+
 /* Visual Functions */
 function setupMenu() {
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
@@ -95,6 +111,7 @@ function setupMain(){
 
 /* Inject */
 showSplashScreen();
+initializeRepoPath();
 
 loadScript('https://raw.githubusercontent.com/adryd325/oneko.js/refs/heads/main/oneko.js', 'onekoJs').then(() => { onekoEl = document.getElementById('oneko'); onekoEl.style.backgroundImage = "url('https://raw.githubusercontent.com/adryd325/oneko.js/main/oneko.gif')"; onekoEl.style.display = "none"; });
 loadScript('https://cdn.jsdelivr.net/npm/darkreader@latest/darkreader.min.js', 'darkReaderPlugin').then(()=>{ DarkReader.setFetchMethod(window.fetch); DarkReader.enable(); })
