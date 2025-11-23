@@ -1,11 +1,11 @@
-const ver = "V3.3.0";
+const ver = "V3.3.1";
 let isDev = false;
 
 let repoPath;
 
 const availableCDNs = [
     `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`,
-    `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev" : "latest"}/`
+    `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev" : "master"}/`
 ];
 
 let device = {
