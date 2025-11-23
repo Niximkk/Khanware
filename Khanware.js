@@ -1,4 +1,4 @@
-const ver = "V3.3.1";
+const ver = "V3.3.2";
 let isDev = false;
 
 let repoPath;
