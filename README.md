@@ -6,7 +6,7 @@
 
 🙂 Stable:
 ```js
-javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@latest/Khanware.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@master/Khanware.js").then(t=>t.text()).then(eval);
 ```
 🔧 Dev (beta):
 ```js
@@ -14,7 +14,7 @@ javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@dev/Khanware.js")
 ```
 🪶 Minimal (beta):
 ```js
-javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@latest/khanwareMinimal.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@master/khanwareMinimal.js").then(t=>t.text()).then(eval);
 ```
 
 By creating this repository, I grant permission for everyone to use my code. However, since it is licensed under the GPL, any modifications or distributions must also be open source.
