@@ -1,12 +1,12 @@
-const ver = "V3.3.2";
+const ver = "V3.4.1";
 let isDev = false;
 
 let repoPath;
 
 const availableCDNs = [
     `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`,
-    `https://cdn.statically.io/gh/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`,
-    `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev" : "master"}/`
+    `https://cdn.jsdelivr.net/gh/niximkk/khanware@${isDev ? "dev" : "master"}/`,
+    `https://cdn.statically.io/gh/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`
 ];
 
 let device = {
@@ -36,6 +36,7 @@ window.features = {
     videoSpoof: true,
     showAnswers: false,
     autoAnswer: false,
+    workerBees: false,
     customBanner: false,
     nextRecomendation: false,
     repeatQuestion: false,
@@ -108,6 +109,7 @@ function setupMain(){
     loadScript(repoPath+'functions/rgbLogo.js', 'rgbLogo');
     loadScript(repoPath+'functions/customBanner.js', 'customBanner');
     loadScript(repoPath+'functions/autoAnswer.js', 'autoAnswer');
+    loadScript(repoPath+'functions/workerBees.js', 'workerBees');
 }
 
 /* Inject */
