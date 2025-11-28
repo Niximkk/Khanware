@@ -1,5 +1,5 @@
-const ver = "V3.3.2";
-let isDev = false;
+const ver = "V3.4.0";
+let isDev = true;
 
 let repoPath;
 
@@ -36,6 +36,7 @@ window.features = {
     videoSpoof: true,
     showAnswers: false,
     autoAnswer: false,
+    workerBees: false,
     customBanner: false,
     nextRecomendation: false,
     repeatQuestion: false,
@@ -108,6 +109,7 @@ function setupMain(){
     loadScript(repoPath+'functions/rgbLogo.js', 'rgbLogo');
     loadScript(repoPath+'functions/customBanner.js', 'customBanner');
     loadScript(repoPath+'functions/autoAnswer.js', 'autoAnswer');
+    loadScript(repoPath+'functions/workerBees.js', 'workerBees');
 }
 
 /* Inject */
