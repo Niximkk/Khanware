@@ -1,5 +1,5 @@
 const ver = "V3.4.1";
-let isDev = true;
+let isDev = false;
 
 let repoPath;
 
