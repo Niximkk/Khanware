@@ -305,6 +305,35 @@ window.fetch = async function(input, init) {
                         content.push({ answers: a.answers });
                         userInput[a.widgetKey] = { answers: a.answers };
                     }
+                    else if (a.type === 'label-image') {
+                    const markersWithAnswers = a.markers.map(marker => ({
+                        label: marker.label,
+                        selected: marker.answers
+                    }));
+                    
+                    content.push(null);
+                    content.push({ markers: markersWithAnswers });
+                    
+                    userInput[a.widgetKey] = { markers: markersWithAnswers };
+                    
+                    if (state?.[a.widgetKey]) {
+                        state[a.widgetKey].markers = a.markers.map(marker => ({
+                            label: marker.label,
+                            x: marker.x,
+                            y: marker.y,
+                            selected: marker.answers
+                        }));
+                        state[a.widgetKey].choices = a.choices;
+                        state[a.widgetKey].imageUrl = a.imageUrl;
+                        state[a.widgetKey].imageWidth = a.imageWidth;
+                        state[a.widgetKey].imageHeight = a.imageHeight;
+                        state[a.widgetKey].imageAlt = a.imageAlt;
+                        state[a.widgetKey].multipleAnswers = a.multipleAnswers;
+                        state[a.widgetKey].hideChoicesFromInstructions = a.hideChoicesFromInstructions;
+                        state[a.widgetKey].static = false;
+                        state[a.widgetKey].alignment = "default";
+                    }
+                }
                 });
                 
                 bodyObj.variables.input.attemptContent = JSON.stringify([content, []]);
