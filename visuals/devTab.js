@@ -13,7 +13,7 @@ plppdo.on('domChanged', () => {
     const section = document.createElement('section');
     section.id = 'khanwareTab';
     section.className = '_1ozlbq6';
-    section.innerHTML = '<h2 class="_18undph9">Khanware</h2>';
+    section.innerHTML = '<h2 class="_n0asy6j">Khanware</h2>';
 
     const ul = document.createElement('ul');
     const devTab = createTab('Developer', '#');
