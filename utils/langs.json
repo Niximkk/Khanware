@@ -55,7 +55,8 @@
         "custom_pfp": "Foto de Perfil Custom",
 
         "tweaks_tab": "Ajustes Ocultos",
-        "roles_enabled": "Funções de Professor e Responsável habilitada."
+        "roles_enabled": "Funções de Professor e Responsável habilitada.",
+        "video_playback_tweak": "Vídeo em 2x e Mudo"
     },
     "en": {
         "injection_success": "Khanware injected successfully!",
@@ -113,7 +114,8 @@
         "custom_pfp": "Custom pfp",
 
         "tweaks_tab": "Tweaks",
-        "roles_enabled": "Teacher and Parent roles enabled."
+        "roles_enabled": "Teacher and Parent roles enabled.",
+        "video_playback_tweak": "2x and Muted Video"
     },
     "es": {
         "injection_success": "¡Khanware inyectado con éxito!",
@@ -171,6 +173,7 @@
         "custom_pfp": "Foto de perfil",
 
         "tweaks_tab": "Ajustes Ocultos",
-        "roles_enabled": "Roles de Profesor y Padre habilitados."
+        "roles_enabled": "Roles de Profesor y Padre habilitados.",
+        "video_playback_tweak": "Vídeo en 2x y Silenciado"
     }
 }
