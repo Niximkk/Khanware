@@ -8,6 +8,7 @@ plppdo.on('domChanged', () => {
         e.preventDefault();
         enableRoles();
         videoPlayback();
+        notUnderage();
         playAudio('https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/2tr6ymgu.wav');
 
     });
@@ -24,5 +25,10 @@ function enableRoles() {
 function videoPlayback() {
     fetch('https://pt.khanacademy.org/api/internal/graphql/SetVideo', { method: "POST", credentials: "include", headers: { "x-ka-fkey": "1" }, body: '{"operationName":"SetVideo","query":"mutation SetVideo($kaid: String!, $muteVideos: Boolean!, $showCaptions: Boolean!, $playbackRate: PlaybackRate!) {\\n  setSettings(\\n    kaid: $kaid\\n    muteVideos: $muteVideos\\n    showCaptions: $showCaptions\\n    playbackRate: $playbackRate\\n  ) {\\n    user {\\n      id\\n      muteVideos\\n      showCaptions\\n      playbackRate\\n      __typename\\n    }\\n    errors {\\n      code\\n      __typename\\n    }\\n    __typename\\n  }\\n}","variables":{"kaid":"kaid_1190508734245417993389344","muteVideos":true,"showCaptions":false,"playbackRate":"RATE_200_PERCENT"}}' })
     .then(async () => { sendToast(`🪄 ${t('video_playback_tweak')}`, 3000); })
+    .catch(e => { debug(`🚨 ${t('error_at')} tweaksTab.js\n${e}`); });
+}
+function notUnderage() {
+    fetch('https://en.khanacademy.org/api/internal/graphql/updateExtraInfo', { method: "POST", credentials: "include", headers: { "x-ka-fkey": "1" }, body: '{"operationName":"updateExtraInfo","query":"mutation updateExtraInfo($nickname: String, $birthday: String) {\\n  setSettings(nickname: $nickname, birthdate: $birthday) {\\n    errors {\\n      code\\n      __typename\\n    }\\n    __typename\\n  }\\n}","variables":{"birthday":"2007-06-09"}}' })
+    .then(async () => { sendToast(`🪄 ${t('not_underage')}`, 3000); })
     .catch(e => { debug(`🚨 ${t('error_at')} tweaksTab.js\n${e}`); });
 }
