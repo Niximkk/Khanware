@@ -52,7 +52,10 @@
         "dark_mode": "Modo Escuro",
         "oneko_js": "Oneko.js",
         "custom_user": "Nome de Usuário",
-        "custom_pfp": "Foto de Perfil Custom"
+        "custom_pfp": "Foto de Perfil Custom",
+
+        "tweaks_tab": "Ajustes Ocultos",
+        "roles_enabled": "Funções de Professor e Responsável habilitada."
     },
     "en": {
         "injection_success": "Khanware injected successfully!",
@@ -107,7 +110,10 @@
         "dark_mode": "Dark Mode",
         "oneko_js": "Oneko.js",
         "custom_user": "Custom Username",
-        "custom_pfp": "Custom pfp"
+        "custom_pfp": "Custom pfp",
+
+        "tweaks_tab": "Tweaks",
+        "roles_enabled": "Teacher and Parent roles enabled."
     },
     "es": {
         "injection_success": "¡Khanware inyectado con éxito!",
@@ -162,6 +168,9 @@
         "dark_mode": "Modo Oscuro",
         "oneko_js": "Ay mi gatito miau",
         "custom_user": "Nombre de Usuario",
-        "custom_pfp": "Foto de perfil"
+        "custom_pfp": "Foto de perfil",
+
+        "tweaks_tab": "Ajustes Ocultos",
+        "roles_enabled": "Roles de Profesor y Padre habilitados."
     }
 }
