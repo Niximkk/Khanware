@@ -111,7 +111,7 @@ function setupMenu() {
 
 /* Main Functions */ 
 function setupMain(){
-    //loadScript(repoPath+'functions/questionSpoof.js', 'questionSpoof');
+    loadScript(repoPath+'functions/questionSpoof.js', 'questionSpoof');
     loadScript(repoPath+'functions/videoSpoof.js', 'videoSpoof');
     loadScript(repoPath+'functions/minuteFarm.js', 'minuteFarm');
     loadScript(repoPath+'functions/spoofUser.js', 'spoofUser');
