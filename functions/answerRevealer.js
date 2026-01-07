@@ -17,7 +17,7 @@ JSON.parse = function (e, t) {
                                 widget.options.choices.forEach(choice => {
                                     if (choice.correct) {
                                         choice.content = "✅ " + choice.content;
-                                        sendToast("🔓 Respostas reveladas.", 1000);                
+                                        sendToast(`🔓 ${t('revealed_answer')}`, 1000);                
                                     }
                                 });
                             }
@@ -27,6 +27,6 @@ JSON.parse = function (e, t) {
                 }
             });
         }
-    } catch (e) { debug(`🚨 Error @ answerRevealer.js\n${e}`); }
+    } catch (e) { debug(`🚨 ${t('error_at')} answerRevealer.js\n${e}`); }
     return body;
 };*/

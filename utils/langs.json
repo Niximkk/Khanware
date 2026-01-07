@@ -1,8 +1,112 @@
 {
     "pt": {
-        "injection_success": "Khanware injetado com sucesso!"
+        "injection_success": "Khanware injetado com sucesso!",
+        "welcome_back": "Bem vindo(a) de volta:",
+        "samsung_joke": "Que tal comprar um Samsung?",
+
+        "error_at": "Erro @",
+
+        "revealed_answer": "Respostas reveladas.",
+
+        "time_limiter_bocked": "Limitador de tempo bloqueado.",
+
+        "exploited_assignment": "Questão exploitada.",
+        "searching_answers": "Buscando respostas corretas...",
+        "captured_answers": "Respostas capturadas:",
+        "applied_answers": "resposta(s) aplicada(s).",
+
+        "cooldown_active": "Cooldown de 30s ativo.",
+        "anti_cheat_detected": "Anti-cheat detectado.",
+        "cooldonwn_warning": "Aguarde 30 segundos nessa atividade.",
+        "cooldown_finished": "Fim do cooldown - Exploit disponível novamente.",
+        "short_video_detected": "Vídeo curto detectado - Indo direto para 100%.",
+        "video_completed": "Video marcado como 100% - Status:",
+        "exploited_video": "Vídeo exploitado.",
+        "video_exploit_started": "Iniciando exploit de vídeo - Duração total:",
+        "anti_cheat_detected_in_stage": "Anti-cheat detectado no estágio:",
+        "video_exploit_complete": "Exploit completo! Vídeo marcado como 100% assistido.",
+
+        "bee_wait": "Aguarde finalizar!",
+        "bee_executing": "Executando a atividade: ",
+        "bee_fail": "Tive problemas ao acessar o script.",
+        "bee_finish": "Atividade concluida!",
+
+        "debug_mode": "Modo Debug",
+        "debug_mode_desc": "Habilita logs de depuração",
+        "disable_security": "Desabilitar Segurança",
+        "disable_security_desc": "Habilita o clique direito e o Ctrl + Shift + I novamente",
+        "disable_ping": "Desabilitar Requisição de Ping",
+        "disable_ping_desc": "Desabilita a requisição acionada a cada 1 segundo para descobrir o ping em ms",
+        "set_to": "definido para",
+
+        "question_spoof": "Spoof de Atividade",
+        "video_spoof": "Spoof de Vídeo",
+        "answer_reveal": "Revelar Respostas",
+        "auto_answer": "Auto Responder",
+        "repeat_question": "Repetir Atividade",
+        "next_recommendation": "Avançar Recomendação",
+        "worker_bee": "Abelha Operária",
+        "minute_farm": "Farm de Tempo",
+        "custom_banner": "Banner Custom",
+        "rgb_logo": "Logo RGB",
+        "dark_mode": "Modo Escuro",
+        "oneko_js": "Oneko.js",
+        "custom_user": "Nome de Usuário",
+        "custom_pfp": "Foto de Perfil Custom"
     },
     "en": {
-        "injection_success": "Khanware injected successfully!"
+        "injection_success": "Khanware injected successfully!",
+        "welcome_back": "Welcome back:",
+        "samsung_joke": "How about buying a Samsung?",
+
+        "error_at": "Error @",
+
+        "revealed_answer": "Answers revealed.",
+
+        "time_limiter_bocked": "Time limiter blocked.",
+
+        "exploited_assignment": "Assignment exploited.",
+        "searching_answers": "Searching for correct answers...",
+        "captured_answers": "Captured answers:",
+        "applied_answers": "applied answer(s).",
+
+        "cooldown_active": "30s cooldown active.",
+        "anti_cheat_detected": "Anti-cheat detected.",
+        "cooldonwn_warning": "Please wait 30 seconds on this activity.",
+        "cooldown_finished": "Cooldown finished - Exploit available again.",
+        "short_video_detected": "Short video detected - Going straight to 100% ",
+        "video_completed": "Video marked as 100% - Status:",
+        "exploited_video": "Video exploited.",
+        "video_exploit_started": "Starting video exploit - Total duration:",
+        "anti_cheat_detected_in_stage": "Anti-cheat detected on stage:",
+        "video_exploit_complete": "Exploit complete! Video marked as 100% watched.",
+
+        "bee_wait": "Please wait until finished!",
+        "bee_executing": "Executing activity: ",
+        "bee_fail": "I had trouble accessing the script.",
+        "bee_finish": "Activity completed!",
+
+        "debug_mode": "Debug Mode",
+        "debug_mode_desc": "Enables debugging logs",
+        "disable_security": "Disable Security",
+        "disable_security_desc": "Enables Right click and Ctrl + Shift + I again",
+        "disable_ping": "Disable Ping Request",
+        "disable_ping_desc": "Disables the request triggered every 1 second to find out the ping in ms",
+        "set_to": "set to",
+
+        "question_spoof": "Question Spoof",
+        "video_spoof": "Video Spoof",
+        "answer_reveal": "Answer Reveal",
+        "auto_answer": "Auto Answer",
+        "repeat_question": "Repeat Question",
+        "next_recommendation": "Next Recommendation",
+        "worker_bee": "Worker Bee",
+        "minute_farm": "Minute Farm",
+        "custom_banner": "Custom Banner",
+        "rgb_logo": "RGB Logo",
+        "dark_mode": "Dark Mode",
+        "oneko_js": "Oneko.js",
+        "custom_user": "Custom Username",
+        "custom_pfp": "Custom pfp"
     }
 }

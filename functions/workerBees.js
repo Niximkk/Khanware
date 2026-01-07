@@ -19,14 +19,14 @@ plppdo.on('domChanged', () => {
             e.preventDefault();
 
             if (this.classList.contains('bee-executing')) {
-                sendToast('🐝 Aguarde finalizar!');
+                sendToast(`🐝 ${t('bee_wait')}`);
                 return;
             }
 
             this.classList.add('bee-executing');
 
             playAudio(beeSounds[Math.floor(Math.random() * beeSounds.length)]);
-            sendToast(`🐝 Executando a ${index + 1}° atividade.`);
+            sendToast(`🐝 ${t('bee_executing')} ${index + 1}`);
 
             const indicatorDiv = this.getElementsByTagName('div')[0];
             indicatorDiv.style.transition = 'opacity 0.5s ease-in-out';
@@ -59,7 +59,7 @@ plppdo.on('domChanged', () => {
                     const response = await fetch(repoPath+'utils/beeScript.js');
 
                     if (!response.ok) {
-                        sendToast('🐝 Tive problemas ao acessar o script.');
+                        sendToast(`🐝 ${t('bee_fail')}`);
                         beeScript = 'window.frameElement?.remove();';
                     }
 
@@ -77,7 +77,7 @@ plppdo.on('domChanged', () => {
             plppdo.on('domChanged', () => {
                 if(!resolved&&!document.getElementById(iframeId)){
                     cleanup();
-                    sendToast('🐝 Atividade concluida!');
+                    sendToast(`🐝 ${t('bee_finish')}`);
                     playAudio('https://minecraft.wiki/images/transcoded/Beehive_enter.ogg/Beehive_enter.ogg.mp3')
                     resolved = true;
                 }

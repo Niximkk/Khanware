@@ -555,14 +555,14 @@ window.fetch = async function(input, init) {
                     }
                 }
                 
-                sendToast("🔓 Questão exploitada.", 750);
+                sendToast(`🔓 ${t('exploited_assignment')}.`, 750);
                 return new Response(JSON.stringify(modified), { 
                     status: res.status, 
                     statusText: res.statusText, 
                     headers: res.headers 
                 });
             }
-        } catch (e) { debug(`🚨 Error @ questionSpoof.js (getAssessmentItem)\n${e}`); }
+        } catch (e) { debug(`🚨 ${t('error_at')} questionSpoof.js (getAssessmentItem)\n${e}`); }
         return res;
     }
     
@@ -571,7 +571,7 @@ window.fetch = async function(input, init) {
             let bodyObj = JSON.parse(body);
             const itemId = bodyObj.variables?.input?.assessmentItemId;
             
-            sendToast('🔍 Buscando respostas corretas...');
+            sendToast(`🔍 ${t('searching_answers')}`);
             
             const emptyBody = createEmptyResponse(bodyObj);
             const emptyBodyStr = JSON.stringify(emptyBody);
@@ -593,7 +593,7 @@ window.fetch = async function(input, init) {
                     
                     if (answers.length > 0) {
                         correctAnswers.set(itemId, answers);
-                        sendToast(`📦 Respostas capturadas: ${answers.length}`);
+                        sendToast(`📦 ${t('captured_answers')} ${answers.length}`);
                         
                         bodyObj = applyAnswers(bodyObj, answers);
                         body = JSON.stringify(bodyObj);
@@ -618,7 +618,7 @@ window.fetch = async function(input, init) {
                                 if (modifyItemData(responseItemData)) {
                                     finalResponse.data.attemptProblem.result.itemData = JSON.stringify(responseItemData);
                                     
-                                    sendToast(`✨ ${answers.length} resposta(s) aplicada(s).`, 750);
+                                    sendToast(`✨ ${answers.length} ${t('applied_answers')}`, 750);
 
                                     return new Response(JSON.stringify(finalResponse), {
                                         status: secondAttempt.status,
@@ -627,16 +627,16 @@ window.fetch = async function(input, init) {
                                     });
                                 }
                             }
-                        } catch (e) { debug(`🚨 Error @ questionSpoof.js (attemptProblem response)\n${e}`); }
+                        } catch (e) { debug(`🚨 ${t('error_at')} questionSpoof.js (attemptProblem response)\n${e}`); }
 
-                        sendToast(`✨ ${answers.length} resposta(s) aplicada(s).`, 750);
+                        sendToast(`✨ ${answers.length} ${t('applied_answers')}`, 750);
                         return secondAttempt;
                     }
                 }
-            } catch (e) { debug(`🚨 Error @ questionSpoof.js (attemptProblem response)\n${e}`); }
+            } catch (e) { debug(`🚨 ${t('error_at')} questionSpoof.js (attemptProblem response)\n${e}`); }
             
             return firstAttempt;
-        } catch (e) { debug(`🚨 Error @ questionSpoof.js (attemptProblem response)\n${e}`); }
+        } catch (e) { debug(`🚨 ${t('error_at')} questionSpoof.js (attemptProblem response)\n${e}`); }
     }
     
     return originalFetch.apply(this, arguments);
