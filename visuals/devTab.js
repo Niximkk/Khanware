@@ -1,22 +1,8 @@
 plppdo.on('domChanged', () => {
-    if (document.getElementById('khanwareTab')) return;
-
-    function createTab(name, href = '#') { 
-        const li = document.createElement('li'); 
-        li.innerHTML = `<a class="_sdyfgnu" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
-        return li; 
-    }
-
-    const nav = document.querySelector('nav[data-testid="side-nav"]'); 
-    if (!nav) return;
-
-    const section = document.createElement('section');
-    section.id = 'khanwareTab';
-    section.className = '_1ozlbq6';
-    section.innerHTML = '<h2 class="_18undph9">Khanware</h2>';
+    if (document.getElementById('devSettings')) return;
 
     const ul = document.createElement('ul');
-    const devTab = createTab('Developer', '#');
+    const devTab = createTab('Developer', '#', 'devSettings');
     
     devTab.querySelector('a').addEventListener('click', (e) => {
         e.preventDefault();
@@ -106,8 +92,7 @@ plppdo.on('domChanged', () => {
     });
 
     ul.appendChild(devTab);
-    section.appendChild(ul);
-    nav.appendChild(section);
+    KWSection.appendChild(ul);
 });
 
 window.createToggle = function(name, desc, varName, toggled = false) {
