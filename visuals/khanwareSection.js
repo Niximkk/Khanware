@@ -8,4 +8,6 @@ plppdo.on('domChanged', () => {
     KWSection.id = 'khanwareTab';
     KWSection.className = '_evg4u4';
     KWSection.innerHTML = '<h2 class="_n0asy6j">Khanware</h2>';
+
+    nav.appendChild(KWSection);
 });
