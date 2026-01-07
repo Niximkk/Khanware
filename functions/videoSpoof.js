@@ -23,17 +23,17 @@ window.fetch = async function (input, init) {
                 
                 const activateCooldown = () => {
                     antiCheatActive = true;
-                    debug(`🛑 30s cooldown active`);
+                    debug(`🛑 ${t('cooldown_active')}`);
                     sendToast("⚠️ Anti-cheat detectado!", 3000);
                     sendToast("⏳ Aguarde 30 segundos nessa atividade", 3000);
                     setTimeout(() => {
                         antiCheatActive = false;
-                        debug(`✅ Cooldown finished - Exploit available again`);
+                        debug(`✅ ${t('cooldown_finished')}`);
                     }, 30000);
                 };
                 
                 if (durationSeconds < 600) {
-                    debug(`📹 Short video detected (${durationSeconds}s) - Going straight to 100%`);
+                    debug(`📹 ${t('short_video_detected')} (${durationSeconds}s)`);
                     
                     bodyObj.variables.input.secondsWatched = durationSeconds;
                     bodyObj.variables.input.lastSecondWatched = durationSeconds;
@@ -47,16 +47,16 @@ window.fetch = async function (input, init) {
                         lastResponse = await originalFetch.call(this, input, { ...init, body: modifiedBody });
                     }
                     
-                    debug(`✅ Video marked as 100% - Status: ${lastResponse.status}`);
+                    debug(`✅ ${t('video_completed')} ${lastResponse.status}`);
                     
                     const responseClone = lastResponse.clone();
                     const responseData = await responseClone.json();
                     
                     if (responseData.data?.updateUserVideoProgress?.error?.code === "CHEATING") {
-                        debug(`⚠️ Anti-cheat detected.`);
+                        debug(`⚠️ ${t('anti_cheat_detected')}`);
                         activateCooldown();
                     } else {
-                        sendToast("🔓 Vídeo exploitado.", 2000);
+                        sendToast(`🔓 ${t('exploited_video')}`, 2000);
                     }
                     
                     return lastResponse;
@@ -64,7 +64,7 @@ window.fetch = async function (input, init) {
                 } else {
                     const percentages = [0.25, 0.50, 0.75, 1.0];
                     
-                    debug(`📹 Starting video exploit - Total duration: ${durationSeconds}s`);
+                    debug(`📹 ${t('video_exploit_started')} ${durationSeconds}s`);
                     
                     let lastResponse;
                     
@@ -92,7 +92,7 @@ window.fetch = async function (input, init) {
                         const responseData = await responseClone.json();
                         
                         if (responseData.data?.updateUserVideoProgress?.error?.code === "CHEATING") {
-                            debug(`⚠️ Anti-cheat detected on stage ${i + 1}/4`);
+                            debug(`⚠️ ${t('anti_cheat_detected_in_stage')} ${i + 1}/4`);
                             activateCooldown();
                             break;
                         }
@@ -103,14 +103,14 @@ window.fetch = async function (input, init) {
                     }
                     
                     if (!antiCheatActive) {
-                        debug(`🎉 Exploit complete! Video marked as 100% watched.`);
-                        sendToast("🔓 Video exploitado.", 2000);
+                        debug(`🎉 ${t('video_exploit_complete')}`);
+                        sendToast(`🔓 ${t('exploited_video')}`, 2000);
                     }
                     
                     return lastResponse;
                 }
             }
-        } catch (e) { debug(`🚨 Error @ videoSpoof.js\n${e}`); }
+        } catch (e) { debug(`🚨 ${t('error_at')} videoSpoof.js\n${e}`); }
     }
     
     return originalFetch.apply(this, arguments);

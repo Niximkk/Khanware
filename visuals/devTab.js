@@ -3,7 +3,7 @@ plppdo.on('domChanged', () => {
 
     function createTab(name, href = '#') { 
         const li = document.createElement('li'); 
-        li.innerHTML = `<a class="_8ry3zep" href="${href}" target="_blank"><span class="_xy39ea8">${name}</span></a>`; 
+        li.innerHTML = `<a class="_sdyfgnu" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
         return li; 
     }
 
@@ -38,8 +38,8 @@ plppdo.on('domChanged', () => {
                             margin: 0; 
                         }
                         .container { 
-                            width: min(90vw, 600px); /* 90% da largura da tela ou 600px no máximo */
-                            height: min(90vh, 600px); /* 90% da altura da tela ou 600px no máximo */
+                            width: min(90vw, 600px);
+                            height: min(90vh, 600px);
                             padding: 20px; 
                             border-radius: 10px; 
                             background: #1e1e1e; 
@@ -67,7 +67,7 @@ plppdo.on('domChanged', () => {
                         .toggle strong { color: #fff; }
                         .toggle small { color: #bbb; }
                         .debug-box { 
-                            width: 90%; /* Reduzido para não encostar nas bordas */
+                            width: 90%;
                             height: 150px; 
                             overflow-y: auto; 
                             background: #000; 
@@ -77,7 +77,7 @@ plppdo.on('domChanged', () => {
                             white-space: pre-wrap; 
                             border-radius: 5px; 
                             border: 1px solid #333;
-                            margin: 10px auto; /* Centraliza horizontalmente */
+                            margin: 10px auto;
                         }
                         input[type="checkbox"] { 
                             transform: scale(1.2); 
@@ -100,9 +100,9 @@ plppdo.on('domChanged', () => {
                 </html>
             `);
         }
-        createToggle('Debug Mode', 'Enables debugging logs', 'debugMode', window.debugMode || false);
-        createToggle('Disable Security', 'Enables Right click and Ctrl + Shift + I again', 'disableSecurity', window.disableSecurity || false);
-        createToggle('Disable Ping Request', 'Disables the request triggered every 1 second to find out the ping in ms', 'disablePing', window.disablePing || false);
+        createToggle(`${t('debug_mode')}`, `${t('debug_mode_desc')}`, 'debugMode', window.debugMode || false);
+        createToggle(`${t('disable_security')}`, `${t('disable_security_desc')}`, 'disableSecurity', window.disableSecurity || false);
+        createToggle(`${t('disable_ping')}`, `${t('disable_ping_desc')}`, 'disablePing', window.disablePing || false);
     });
 
     ul.appendChild(devTab);
@@ -130,7 +130,7 @@ window.createToggle = function(name, desc, varName, toggled = false) {
 
     toggleElement.querySelector('input').addEventListener('change', (e) => {
         window[varName] = e.target.checked;
-        debug(`❕${name} set to ${window[varName]}`);
+        debug(`❕${name} ${t('set_to')} ${window[varName]}`);
     });
 
     toggleContainer.appendChild(toggleElement);
@@ -144,4 +144,4 @@ window.debug = function(message) {
         debugBox.scrollTop = debugBox.scrollHeight;
     }
 };
-window.onerror = function(message, source, lineno, colno, error) { debug(`🚨 Error @ ${source}:${lineno},${colno} \n${error ? error.stack : message}`); return true; };
+window.onerror = function(message, source, lineno, colno, error) { debug(`🚨 ${t('error_at')} ${source}:${lineno},${colno} \n${error ? error.stack : message}`); return true; };

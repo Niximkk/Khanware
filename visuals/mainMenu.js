@@ -102,22 +102,22 @@ dropdownMenu.innerHTML = `
 watermark.appendChild(dropdownMenu);
 
 let featuresList = [
-    { name: 'questionSpoof', type: 'checkbox', variable: 'features.questionSpoof', attributes: 'checked', labeled: true, label: 'Question Spoof' },
-    { name: 'videoSpoof', type: 'checkbox', variable: 'features.videoSpoof', attributes: 'checked', labeled: true, label: 'Video Spoof' },
-    { name: 'showAnswers', type: 'checkbox', variable: 'features.showAnswers', labeled: true, label: 'Answer Revealer' },
-    { name: 'autoAnswer', type: 'checkbox', variable: 'features.autoAnswer', dependent: 'autoAnswerDelay,nextRecomendation,repeatQuestion', labeled: true, label: 'Auto Answer' },
-    { name: 'repeatQuestion', className: 'repeatQuestion', type: 'checkbox', variable: 'features.repeatQuestion', attributes: 'style="display:none;"', labeled: true, label: 'Repeat Question' },
-    { name: 'nextRecomendation', className: 'nextRecomendation', type: 'checkbox', variable: 'features.nextRecomendation', attributes: 'style="display:none;"', labeled: true, label: 'Recomendations' },
+    { name: 'questionSpoof', type: 'checkbox', variable: 'features.questionSpoof', attributes: 'checked', labeled: true, label: `${t('question_spoof')}` },
+    { name: 'videoSpoof', type: 'checkbox', variable: 'features.videoSpoof', attributes: 'checked', labeled: true, label: `${t('video_spoof')}` },
+    { name: 'showAnswers', type: 'checkbox', variable: 'features.showAnswers', labeled: true, label: `${t('answer_reveal')}` },
+    { name: 'autoAnswer', type: 'checkbox', variable: 'features.autoAnswer', dependent: 'autoAnswerDelay,nextRecomendation,repeatQuestion', labeled: true, label: `${t('auto_answer')}` },
+    { name: 'repeatQuestion', className: 'repeatQuestion', type: 'checkbox', variable: 'features.repeatQuestion', attributes: 'style="display:none;"', labeled: true, label: `${t('repeat_question')}` },
+    { name: 'nextRecomendation', className: 'nextRecomendation', type: 'checkbox', variable: 'features.nextRecomendation', attributes: 'style="display:none;"', labeled: true, label: `${t('next_recommendation')}` },
     { name: 'autoAnswerDelay', className: 'autoAnswerDelay', type: 'range', variable: 'features.autoAnswerDelay', attributes: 'style="display:none;" min="1" max="3" value="1"', labeled: false },
-    { name: 'workerBees', type: 'checkbox', variable: 'features.workerBees', labeled: true, label: 'Worker Bees' },
-    { name: 'minuteFarm', type: 'checkbox', variable: 'features.minuteFarmer', labeled: true, label: 'Minute Farmer' },
-    { name: 'customBanner', type: 'checkbox', variable: 'features.customBanner', labeled: true, label: 'Custom Banner' },
-    { name: 'rgbLogo', type: 'checkbox', variable: 'features.rgbLogo', labeled: true, label: 'RGB Logo' },
-    { name: 'darkMode', type: 'checkbox', variable: 'features.darkMode', attributes: 'checked', labeled: true, label: 'Dark Mode' },
-    { name: 'onekoJs', type: 'checkbox', variable: 'features.onekoJs', labeled: true, label: 'onekoJs' },
-    { name: 'Custom Username', type: 'nonInput' },
+    { name: 'workerBees', type: 'checkbox', variable: 'features.workerBees', labeled: true, label: `${t('worker_bee')}` },
+    { name: 'minuteFarm', type: 'checkbox', variable: 'features.minuteFarmer', labeled: true, label: `${t('minute_farm')}` },
+    { name: 'customBanner', type: 'checkbox', variable: 'features.customBanner', labeled: true, label: `${t('custom_banner')}` },
+    { name: 'rgbLogo', type: 'checkbox', variable: 'features.rgbLogo', labeled: true, label: `${t('rgb_logo')}` },
+    { name: 'darkMode', type: 'checkbox', variable: 'features.darkMode', attributes: 'checked', labeled: true, label: `${t('dark_mode')}` },
+    { name: 'onekoJs', type: 'checkbox', variable: 'features.onekoJs', labeled: true, label: `${t('oneko_js')}` },
+    { name: `${t('custom_user')}`, type: 'nonInput' },
     { name: 'customName', type: 'text', variable: 'featureConfigs.customUsername', attributes: 'autocomplete="off"' },
-    { name: 'Custom pfp', type: 'nonInput' },
+    { name: `${t('custom_pfp')}`, type: 'nonInput' },
     { name: 'customPfp', type: 'text', variable: 'featureConfigs.customPfp', attributes: 'autocomplete="off"' }
   ];
   
