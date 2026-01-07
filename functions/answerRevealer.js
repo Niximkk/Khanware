@@ -1,3 +1,5 @@
+/* Broken, no fix available yet. 
+
 const originalParse = JSON.parse;
 
 JSON.parse = function (e, t) {
@@ -27,4 +29,4 @@ JSON.parse = function (e, t) {
         }
     } catch (e) { debug(`🚨 Error @ answerRevealer.js\n${e}`); }
     return body;
-};
+};*/
