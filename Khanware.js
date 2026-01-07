@@ -31,6 +31,8 @@ const watermark = document.createElement('watermark');
 const statsPanel = document.createElement('statsPanel');
 const splashScreen = document.createElement('splashScreen');
 
+let KWSection;
+
 /* Globals */
 window.features = {
     questionSpoof: true,
@@ -84,6 +86,12 @@ async function hideSplashScreen() { splashScreen.style.opacity = '0'; setTimeout
 async function loadScript(url, label) { return fetch(url).then(response => response.text()).then(script => { loadedPlugins.push(label); eval(script); }); }
 async function loadCss(url) { return new Promise((resolve) => { const link = document.createElement('link'); link.rel = 'stylesheet'; link.type = 'text/css'; link.href = url; link.onload = () => resolve(); document.head.appendChild(link); }); }
 
+function createTab(name, href = '#', id) { 
+    const li = document.createElement('li'); 
+    li.innerHTML = `<a class="_sdyfgnu" id="${id}" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
+    return li; 
+}
+
 /* Repo Fallback */
 async function initializeRepoPath() {
     for (const cdn of availableCDNs) {
@@ -106,7 +114,9 @@ function setupMenu() {
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
     loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
     loadScript(repoPath+'visuals/viewCounter.js', 'viewCounter');
+    loadScript(repoPath+'visuals/khanwareSection.js', 'khanwareSection');
     if(isDev) loadScript(repoPath+'visuals/devTab.js', 'devTab');
+    loadScript(repoPath+'visuals/tweaksTab.js', 'tweaksTab');
 }
 
 /* Main Functions */ 
