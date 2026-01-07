@@ -92,8 +92,8 @@ plppdo.on('domChanged', () => {
     });
 
     ul.appendChild(devTab);
-    KWSection.appendChild(ul);
-    nav.appendChild(KWSection);
+    window.KWSection.appendChild(ul);
+    nav.appendChild(window.KWSection);
 });
 
 window.createToggle = function(name, desc, varName, toggled = false) {

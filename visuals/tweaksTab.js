@@ -10,8 +10,8 @@ plppdo.on('domChanged', () => {
     });
 
     ul.appendChild(tweaksTab);
-    KWSection.appendChild(ul);
-    nav.appendChild(KWSection);
+    window.KWSection.appendChild(ul);
+    nav.appendChild(window.KWSection);
 });
 
 function enableRoles() {

@@ -31,7 +31,7 @@ const watermark = document.createElement('watermark');
 const statsPanel = document.createElement('statsPanel');
 const splashScreen = document.createElement('splashScreen');
 
-let KWSection;
+window.KWSection;
 
 /* Globals */
 window.features = {
