@@ -108,5 +108,60 @@
         "oneko_js": "Oneko.js",
         "custom_user": "Custom Username",
         "custom_pfp": "Custom pfp"
+    },
+    "es": {
+        "injection_success": "¡Khanware inyectado con éxito!",
+        "welcome_back": "Bienvenido de nuevo:",
+        "samsung_joke": "¿Qué tal comprar un Samsung?",
+
+        "error_at": "Error @",
+
+        "revealed_answer": "Respuestas reveladas.",
+
+        "time_limiter_bocked": "Limitador de tiempo bloqueado.",
+
+        "exploited_assignment": "Actividad explotada.",
+        "searching_answers": "Buscando respuestas correctas...",
+        "captured_answers": "Respuestas capturadas:",
+        "applied_answers": "respuesta(s) aplicada(s).",
+
+        "cooldown_active": "Enfriamiento de 30s activo.",
+        "anti_cheat_detected": "Anti-cheat detectado.",
+        "cooldonwn_warning": "Por favor espera 30 segundos en esta actividad.",
+        "cooldown_finished": "Enfriamiento terminado - Exploit disponible nuevamente.",
+        "short_video_detected": "Vídeo corto detectado - Yendo directo al 100%.",
+        "video_completed": "Vídeo marcado como 100% - Estado:",
+        "exploited_video": "Vídeo explotado.",
+        "video_exploit_started": "Iniciando explotación de vídeo - Duración total:",
+        "anti_cheat_detected_in_stage": "Anti-cheat detectado en la etapa:",
+        "video_exploit_complete": "¡Explotación completa! Vídeo marcado como 100% visto.",
+
+        "bee_wait": "¡Por favor espera hasta que termine!",
+        "bee_executing": "Ejecutando actividad: ",
+        "bee_fail": "Tuve problemas para acceder al script.",
+        "bee_finish": "¡Actividad completada!",
+
+        "debug_mode": "Modo de depuración",
+        "debug_mode_desc": "Habilita registros de depuración",
+        "disable_security": "Desactivar seguridad",
+        "disable_security_desc": "Habilita el clic derecho y Ctrl + Shift + I nuevamente",
+        "disable_ping": "Desactivar solicitud de ping",
+        "disable_ping_desc": "Desactiva la solicitud que se activa cada 1 segundo para conocer el ping en ms",
+        "set_to": "establecido en",
+
+        "question_spoof": "Spoof de preguntas",
+        "video_spoof": "Spoof de vídeo",
+        "answer_reveal": "Revelar respuestas",
+        "auto_answer": "Respuesta automática",
+        "repeat_question": "Repetir pregunta",
+        "next_recommendation": "Siguiente recomendación",
+        "worker_bee": "Abeja obrera",
+        "minute_farm": "Farm de tiempo",
+        "custom_banner": "Banner personalizado",
+        "rgb_logo": "Logo RGB",
+        "dark_mode": "Modo oscuro",
+        "oneko_js": "Ay mi gatito miau",
+        "custom_user": "Nombre de usuario personalizado",
+        "custom_pfp": "Pfp personalizado"
     }
 }
