@@ -1,5 +1,5 @@
-const ver = "V3.8.2"; /* The language update! 🗺️ */
-let isDev = false;
+const ver = "V3.9.0";
+let isDev = true;
 
 let repoPath;
 
