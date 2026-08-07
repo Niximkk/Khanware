@@ -88,7 +88,7 @@ async function loadCss(url) { return new Promise((resolve) => { const link = doc
 
 function createTab(name, href = '#', id) { 
     const li = document.createElement('li'); 
-    li.innerHTML = `<a class="_sdyfgnu" id="${id}" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
+    li.innerHTML = `<a class="_1fk4n79o" id="${id}" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
     return li; 
 }
 
