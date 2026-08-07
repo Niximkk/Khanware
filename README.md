@@ -1,8 +1,11 @@
-# 🌿 Khanware
-### The most advanced Khan Academy cheat.
+# 🌿 Khanware (2024 - 2026)
 
-> 💠 Doação via pix:
-> https://livepix.gg/nixyy
+> 🪦 I don’t have time to maintain this anymore. Consider using [Khanto](https://khan.cupiditys.lol/).  
+> I’m not sure how a non-Brazilian student would use that tool, but in that case, I would probably reach out to the developer.
+
+> If you have the required knowledge, feel free to fix the code yourself (PRs are welcome here).
+
+### The most advanced Khan Academy cheat.
 
 🙂 Stable:
 ```js
