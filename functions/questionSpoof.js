@@ -380,6 +380,10 @@ const applyAnswers = (bodyObj, answers) => {
     const stateKeys = Object.keys(state);
     
     const hasInvalidWidgets = stateKeys.some(key => !answerKeys.has(key) && key !== 'hint');
+    console.log("DEBUG state:", state);
+    console.log("DEBUG stateKeys:", stateKeys);
+    console.log("DEBUG answerKeys:", answerKeys);
+    console.log("DEBUG hasInvalidWidgets:", hasInvalidWidgets);
     if (hasInvalidWidgets) { state = {}; answers.forEach(a => { state[a.widgetKey] = {}; }); }
 
     answers.forEach(a => {
