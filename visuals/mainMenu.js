@@ -93,7 +93,7 @@ dropdownMenu.innerHTML = `
         input[type="checkbox"] {appearance: none; width: 15px; height: 15px; background-color: #3a3a3b;
         border: 1px solid #acacac; border-radius: 3px; margin-right: 5px; cursor: pointer;}
         input[type="checkbox"]:checked {background-color: #540b8a; border-color: #720fb8;}
-        input[type="text"], input[type="number"], input[type="range"] {width: calc(100% - 10px); border: 1px solid #343434; 
+        input[type="text"], input[type="password"], input[type="number"], input[type="range"] {width: calc(100% - 10px); border: 1px solid #343434; 
         color: white; accent-color: #540b8a; background-color: #540b8a; padding: 3px; border-radius: 3px; background: none;}
         label {display: flex; align-items: center; color: #3a3a3b; padding-top: 3px;}
     </style>
@@ -104,12 +104,12 @@ watermark.appendChild(dropdownMenu);
 let featuresList = [
     { name: 'questionSpoof', type: 'checkbox', variable: 'features.questionSpoof', attributes: 'checked', labeled: true, label: `${t('question_spoof')}` },
     { name: 'videoSpoof', type: 'checkbox', variable: 'features.videoSpoof', attributes: 'checked', labeled: true, label: `${t('video_spoof')}` },
-    { name: 'showAnswers', type: 'checkbox', variable: 'features.showAnswers', labeled: true, label: `${t('answer_reveal')}` },
+    /* { name: 'showAnswers', type: 'checkbox', variable: 'features.showAnswers', labeled: true, label: `${t('answer_reveal')}` }, */
     { name: 'autoAnswer', type: 'checkbox', variable: 'features.autoAnswer', dependent: 'autoAnswerDelay,nextRecomendation,repeatQuestion', labeled: true, label: `${t('auto_answer')}` },
     { name: 'repeatQuestion', className: 'repeatQuestion', type: 'checkbox', variable: 'features.repeatQuestion', attributes: 'style="display:none;"', labeled: true, label: `${t('repeat_question')}` },
     { name: 'nextRecomendation', className: 'nextRecomendation', type: 'checkbox', variable: 'features.nextRecomendation', attributes: 'style="display:none;"', labeled: true, label: `${t('next_recommendation')}` },
     { name: 'autoAnswerDelay', className: 'autoAnswerDelay', type: 'range', variable: 'features.autoAnswerDelay', attributes: 'style="display:none;" min="1" max="3" value="1"', labeled: false },
-    { name: 'workerBees', type: 'checkbox', variable: 'features.workerBees', labeled: true, label: `${t('worker_bee')}` },
+    /* { name: 'workerBees', type: 'checkbox', variable: 'features.workerBees', labeled: true, label: `${t('worker_bee')}` }, */
     { name: 'minuteFarm', type: 'checkbox', variable: 'features.minuteFarmer', labeled: true, label: `${t('minute_farm')}` },
     { name: 'customBanner', type: 'checkbox', variable: 'features.customBanner', labeled: true, label: `${t('custom_banner')}` },
     { name: 'rgbLogo', type: 'checkbox', variable: 'features.rgbLogo', labeled: true, label: `${t('rgb_logo')}` },
@@ -118,7 +118,11 @@ let featuresList = [
     { name: `${t('custom_user')}`, type: 'nonInput' },
     { name: 'customName', type: 'text', variable: 'featureConfigs.customUsername', attributes: 'autocomplete="off"' },
     { name: `${t('custom_pfp')}`, type: 'nonInput' },
-    { name: 'customPfp', type: 'text', variable: 'featureConfigs.customPfp', attributes: 'autocomplete="off"' }
+    { name: 'customPfp', type: 'text', variable: 'featureConfigs.customPfp', attributes: 'autocomplete="off"' },
+    { name: `${t('openrouter_key')}`, type: 'nonInput' },
+    { name: 'openRouterKey', type: 'text', variable: 'featureConfigs.openRouterKey', attributes: 'autocomplete="off" type="password" placeholder="sk-or-v1-..."' },
+    { name: `${t('openrouter_model')}`, type: 'nonInput' },
+    { name: 'openRouterModel', type: 'text', variable: 'featureConfigs.openRouterModel', attributes: 'autocomplete="off" placeholder="openrouter/free"' }
   ];
   
 
@@ -126,8 +130,9 @@ featuresList.push({ name: `${user.username} - UID: ${user.UID}`, type: 'nonInput
 
 addFeature(featuresList);
 
-handleInput(['questionSpoof', 'videoSpoof', 'showAnswers', 'nextRecomendation', 'repeatQuestion', 'minuteFarm', 'customBanner', 'rgbLogo', 'workerBees']);
+handleInput(['questionSpoof', 'videoSpoof', /* 'showAnswers', */ 'nextRecomendation', 'repeatQuestion', 'minuteFarm', 'customBanner', 'rgbLogo' /* , 'workerBees' */]);
 handleInput(['customName', 'customPfp']);
+handleInput(['openRouterKey', 'openRouterModel']);
 handleInput('autoAnswer', checked => checked && !features.questionSpoof && (document.querySelector('[setting-data="features.questionSpoof"]').checked = features.questionSpoof = true));
 handleInput('autoAnswerDelay', value => value && (featureConfigs.autoAnswerDelay = 4 - value));
 handleInput('darkMode', checked => checked ? (DarkReader.setFetchMethod(window.fetch), DarkReader.enable()) : DarkReader.disable());

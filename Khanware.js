@@ -1,4 +1,4 @@
-const ver = "V3.9.7";
+const ver = "V3.10.0";
 let isDev = false;
 
 let repoPath;
@@ -37,9 +37,9 @@ let KWSection;
 window.features = {
     questionSpoof: true,
     videoSpoof: true,
-    showAnswers: false,
+    /* showAnswers: false, */
     autoAnswer: false,
-    workerBees: false,
+    /* workerBees: false, */
     customBanner: false,
     nextRecomendation: false,
     repeatQuestion: false,
@@ -88,7 +88,7 @@ async function loadCss(url) { return new Promise((resolve) => { const link = doc
 
 function createTab(name, href = '#', id) { 
     const li = document.createElement('li'); 
-    li.innerHTML = `<a class="_sdyfgnu" id="${id}" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
+    li.innerHTML = `<a class="_1fk4n79o" id="${id}" href="${href}" target="_blank"><span class="_i7xxeac">${name}</span></a>`; 
     return li; 
 }
 
@@ -110,7 +110,7 @@ async function initializeRepoPath() {
 
 /* Visual Functions */
 function setupMenu() {
-    plppdo.on("domChanged",(()=>{if(document.getElementById("khanwareTab"))return;const e=document.querySelector('nav[data-testid="side-nav"]');e&&(KWSection=document.createElement("section"),KWSection.id="khanwareTab",KWSection.className="_evg4u4",KWSection.innerHTML='<h2 class="_n0asy6j">Khanware</h2>',e.appendChild(KWSection))}));
+    plppdo.on("domChanged",(()=>{if(document.getElementById("khanwareTab"))return;const e=document.querySelector('nav[data-testid="side-nav"]');e&&(KWSection=document.createElement("section"),KWSection.id="khanwareTab",KWSection.className="_evg4u4",KWSection.innerHTML='<h2 class="_e3ps3qj">Khanware</h2>',e.appendChild(KWSection))}));
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
     loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
@@ -125,11 +125,11 @@ function setupMain(){
     loadScript(repoPath+'functions/videoSpoof.js', 'videoSpoof');
     loadScript(repoPath+'functions/minuteFarm.js', 'minuteFarm');
     loadScript(repoPath+'functions/spoofUser.js', 'spoofUser');
-    loadScript(repoPath+'functions/answerRevealer.js', 'answerRevealer');
+    /* loadScript(repoPath+'functions/answerRevealer.js', 'answerRevealer'); */
     loadScript(repoPath+'functions/rgbLogo.js', 'rgbLogo');
     loadScript(repoPath+'functions/customBanner.js', 'customBanner');
     loadScript(repoPath+'functions/autoAnswer.js', 'autoAnswer');
-    loadScript(repoPath+'functions/workerBees.js', 'workerBees');
+    /* loadScript(repoPath+'functions/workerBees.js', 'workerBees'); */
 }
 
 /* Inject */
@@ -143,9 +143,8 @@ function setupMain(){
     loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css', 'toastifyCss');
     loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
     .then(async () => {
-        fetch(`${window.location.origin}/api/internal/graphql/getFullUserProfile`,{referrer:"https://pt.khanacademy.org/profile/me",body:'{"operationName":"getFullUserProfile","query":"query getFullUserProfile($kaid: String, $username: String) {\\n  user(kaid: $kaid, username: $username) {\\n    id\\n    kaid\\n    key\\n    userId\\n    email\\n    username\\n    profileRoot\\n    gaUserId\\n    isPhantom\\n    isDeveloper: hasPermission(name: \\"can_do_what_only_admins_can_do\\")\\n    isPublisher: hasPermission(name: \\"can_publish\\", scope: ANY_ON_CURRENT_LOCALE)\\n    isModerator: hasPermission(name: \\"can_moderate_users\\", scope: GLOBAL)\\n    isParent\\n    isTeacher\\n    isFormalTeacher\\n    isK4dStudent\\n    isKmapStudent\\n    isDataCollectible\\n    isChild\\n    isOrphan\\n    isCoachingLoggedInUser\\n    canModifyCoaches\\n    nickname\\n    hideVisual\\n    joined\\n    points\\n    countVideosCompleted\\n    bio\\n    profile {\\n      accessLevel\\n      __typename\\n    }\\n    soundOn\\n    muteVideos\\n    showCaptions\\n    prefersReducedMotion\\n    noColorInVideos\\n    newNotificationCount\\n    canHellban: hasPermission(name: \\"can_ban_users\\", scope: GLOBAL)\\n    canMessageUsers: hasPermission(\\n      name: \\"can_send_moderator_messages\\"\\n      scope: GLOBAL\\n    )\\n    isSelf: isActor\\n    hasStudents: hasCoachees\\n    hasClasses\\n    hasChildren\\n    hasCoach\\n    badgeCounts\\n    homepageUrl\\n    isMidsignupPhantom\\n    includesDistrictOwnedData\\n    includesKmapDistrictOwnedData\\n    includesK4dDistrictOwnedData\\n    canAccessDistrictsHomepage\\n    isInKhanClassroomDistrict\\n    underAgeGate {\\n      parentEmail\\n      daysUntilCutoff\\n      approvalGivenAt\\n      __typename\\n    }\\n    authEmails\\n    signupDataIfUnverified {\\n      email\\n      emailBounced\\n      __typename\\n    }\\n    pendingEmailVerifications {\\n      email\\n      __typename\\n    }\\n    hasAccessToAIGuideCompanionMode\\n    hasAccessToAIGuideLearner\\n    hasAccessToAIGuideDistrictAdmin\\n    hasAccessToAIGuideParent\\n    hasAccessToAIGuideTeacher\\n    tosAccepted\\n    shouldShowAgeCheck\\n    birthMonthYear\\n    lastLoginCountry\\n    region\\n    userDistrictInfos {\\n      id\\n      isKAD\\n      district {\\n        id\\n        region\\n        __typename\\n      }\\n      __typename\\n    }\\n    schoolAffiliation {\\n      id\\n      location\\n      __typename\\n    }\\n    __typename\\n  }\\n  actorIsImpersonatingUser\\n  isAIGuideEnabled\\n  hasAccessToAIGuideDev\\n}"}',method:"POST",mode:"cors",credentials:"include"})
-        .then(async response => { let data = await response.json(); user = { nickname: data.data.user.nickname, username: data.data.user.username, UID: data.data.user.id.slice(-5) }; })
-        
+        fetch(`${window.location.origin}/api/internal/graphql/getFullUserProfile`,{referrer:"https://pt.khanacademy.org/profile/me",body:'{"operationName":"getFullUserProfile","query":"query getFullUserProfile($kaid: String, $username: String) {\\n  user(kaid: $kaid, username: $username) {\\n    id\\n    kaid\\n    key\\n    email\\n    username\\n    profileRoot\\n    gaUserId\\n    isPhantom\\n    isDeveloper: hasPermission(name: \\"can_do_what_only_admins_can_do\\")\\n    isPublisher: hasPermission(name: \\"can_publish\\", scope: ANY_ON_CURRENT_LOCALE)\\n    isModerator: hasPermission(name: \\"can_moderate_users\\", scope: GLOBAL)\\n    isParent\\n    isTeacher\\n    isFormalTeacher\\n    isK4dStudent\\n    isKmapStudent\\n    isDataCollectible\\n    isChild\\n    isOrphan\\n    isCoachingLoggedInUser\\n    canModifyCoaches\\n    nickname\\n    hideVisual\\n    joined\\n    points\\n    countVideosCompleted\\n    bio\\n    profile {\\n      accessLevel\\n      __typename\\n    }\\n    soundOn\\n    muteVideos\\n    showCaptions\\n    prefersReducedMotion\\n    noColorInVideos\\n    newNotificationCount\\n    canHellban: hasPermission(name: \\"can_ban_users\\", scope: GLOBAL)\\n    canMessageUsers: hasPermission(\\n      name: \\"can_send_moderator_messages\\"\\n      scope: GLOBAL\\n    )\\n    isSelf: isActor\\n    hasStudents: hasCoachees\\n    hasClasses\\n    hasChildren\\n    hasCoach\\n    badgeCounts\\n    homepageUrl\\n    isMidsignupPhantom\\n    includesDistrictOwnedData\\n    includesCentrallyOwnedDistrictData\\n    includesKmapDistrictOwnedData\\n    includesK4dDistrictOwnedData\\n    canAccessDistrictsHomepage\\n    isInKacPilotDistrict\\n    hasUnifiedTeacherRole: hasUnifiedUserRole(role: TEACHER)\\n    hasUnifiedCoachRole: hasUnifiedUserRole(role: COACH)\\n    underAgeGate {\\n      parentEmail\\n      daysUntilCutoff\\n      approvalGivenAt\\n      __typename\\n    }\\n    authEmails\\n    signupDataIfUnverified {\\n      email\\n      emailBounced\\n      __typename\\n    }\\n    pendingEmailVerifications {\\n      email\\n      __typename\\n    }\\n    hasAccessToAIGuideCompanionMode\\n    hasAccessToAIGuideLearner\\n    hasAccessToAIGuideDistrictAdmin\\n    hasAccessToAIGuideParent\\n    hasAccessToAIGuideTeacher\\n    tosAccepted\\n    shouldShowAgeCheck\\n    birthMonthYear\\n    lastLoginCountry\\n    region\\n    userDistrictInfos {\\n      id\\n      isKAD\\n      primaryRole\\n      district {\\n        id\\n        region\\n        __typename\\n      }\\n      __typename\\n    }\\n    schoolAffiliation {\\n      id\\n      location\\n      __typename\\n    }\\n    __typename\\n  }\\n  isAIGuideEnabled\\n  hasAccessToAIGuideDev\\n}"}',method:"POST",mode:"cors",credentials:"include"})
+        .then(async response => { let data = await response.json(); user = { nickname: data.data.user.nickname, username: data.data.user.username || data.data.user.nickname, UID: data.data.user.id.slice(-5) }; })
 
         sendToast(`🌿 ${t('injection_success')}`);
         
