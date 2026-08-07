@@ -1,4 +1,4 @@
-/* Yes, OG Khanware goes brrrrr */
+/* Disabled: not compatible with the AI solve method. */
 
 const beeSounds = [
     'https://minecraft.wiki/images/transcoded/Bee_pollinate1.ogg/Bee_pollinate1.ogg.mp3',

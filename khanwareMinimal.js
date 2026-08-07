@@ -31,7 +31,7 @@ async function loadCss(url) { return new Promise((resolve) => { const link = doc
 function setupMain(){
     /* QuestionSpoof */
     (function () {
-        const openRouterKey = window.prompt('🔑 Cole sua OpenRouter API key (https://openrouter.ai/keys):', '') || null;
+        const openRouterKey = window.prompt('🔑 Paste your OpenRouter API key (https://openrouter.ai/keys):', '') || null;
         const model = 'openrouter/free';
 
         const phrases = [ 
@@ -45,6 +45,7 @@ function setupMain(){
         const correctAnswers = new Map();
         const pendingSolves = new Map();
         let warnedNoKey = false;
+        let warnedRateLimit = false;
 
         const toFraction = (d) => { if (d === 0 || d === 1) return String(d); const decimals = (String(d).split('.')[1] || '').length; let num = Math.round(d * Math.pow(10, decimals)), den = Math.pow(10, decimals); const gcd = (a, b) => { while (b) [a, b] = [b, a % b]; return a; }; const div = gcd(Math.abs(num), Math.abs(den)); return den / div === 1 ? String(num / div) : `${num / div}/${den / div}`; };
         const getItemId = (body) => { try { const req = JSON.parse(body); return req?.variables?.assessmentItemId || req?.variables?.input?.assessmentItemId || req?.variables?.item?.id || null; } catch (e) { return null; } };
@@ -72,11 +73,86 @@ function setupMain(){
             return Array.isArray(content) ? content.join('\n') : String(content ?? '');
         };
 
+        const condenseWidget = (w) => {
+            const type = w?.type || 'unknown';
+            const options = w?.options || {};
+            const o = {};
+            if (type === 'radio') {
+                o.choices = (options.choices || []).map(c => (typeof c === 'string' ? c : c.content));
+                if (options.multipleSelect) o.multipleSelect = true;
+            }
+            else if (type === 'dropdown') {
+                o.choices = (options.choices || []).map(c => (typeof c === 'string' ? c : c.content));
+                if (options.placeholder) o.placeholder = options.placeholder;
+            }
+            else if (type === 'numeric-input') {
+                if (options.answerType) o.answerType = options.answerType;
+                if (options.simplify) o.simplify = options.simplify;
+            }
+            else if (type === 'input-number') {
+                if (options.answerType) o.answerType = options.answerType;
+                if (options.simplify) o.simplify = options.simplify;
+            }
+            else if (type === 'expression') {
+                if (Array.isArray(options.buttonSets)) o.buttonSets = options.buttonSets;
+                if (Array.isArray(options.functions)) o.functions = options.functions;
+                if (options.times) o.times = true;
+            }
+            else if (type === 'grapher') {
+                if (options.graph) o.graph = options.graph;
+            }
+            else if (type === 'interactive-graph') {
+                if (options.graph) o.graph = options.graph;
+                if (options.snapTo) o.snapTo = options.snapTo;
+            }
+            else if (type === 'categorizer') {
+                if (Array.isArray(options.categories)) o.categories = options.categories;
+                if (Array.isArray(options.items)) o.items = options.items;
+            }
+            else if (type === 'matcher') {
+                if (options.left) o.left = options.left;
+                if (options.right) o.right = options.right;
+            }
+            else if (type === 'orderer') {
+                if (Array.isArray(options.correctOptions)) o.options = options.correctOptions;
+            }
+            else if (type === 'sorter') {
+                if (options.layout) o.layout = options.layout;
+                if (Array.isArray(options.correct)) o.correct = options.correct;
+            }
+            else if (type === 'number-line') {
+                if (options.range) o.range = options.range;
+                if (options.tickStep) o.tickStep = options.tickStep;
+                if (options.numDivisions) o.numDivisions = options.numDivisions;
+            }
+            else if (type === 'plotter') {
+                if (options.type) o.type = options.type;
+                if (Array.isArray(options.categories)) o.categories = options.categories;
+                if (Array.isArray(options.labels)) o.labels = options.labels;
+                if (options.maxY) o.maxY = options.maxY;
+                if (options.scaleY) o.scaleY = options.scaleY;
+                if (options.snapsPerLine) o.snapsPerLine = options.snapsPerLine;
+                if (options.labelInterval) o.labelInterval = options.labelInterval;
+                if (Array.isArray(options.starting)) o.starting = options.starting;
+                if (options.picUrl) o.picUrl = options.picUrl;
+            }
+            else if (type === 'matrix') {
+                if (options.matrixBoardSize) o.matrixBoardSize = options.matrixBoardSize;
+            }
+            else if (type === 'label-image') {
+                if (Array.isArray(options.markers)) o.markers = options.markers.map(m => ({ label: m.label, x: m.x, y: m.y }));
+                if (Array.isArray(options.choices)) o.choices = options.choices.map(c => (typeof c === 'string' ? c : c.content));
+                if (options.imageUrl) o.imageUrl = options.imageUrl;
+                if (options.multipleAnswers) o.multipleAnswers = true;
+            }
+            return { type, options: o };
+        };
+
         const buildSolvePrompt = (itemData) => {
             const content = questionContentText(itemData);
             const usedWidgets = {};
             for (const [key, w] of Object.entries(itemData?.question?.widgets || {})) {
-                if (isWidgetUsed(key, content, itemData?.hints)) usedWidgets[key] = w;
+                if (isWidgetUsed(key, content, itemData?.hints)) usedWidgets[key] = condenseWidget(w);
             }
 
             return `Solve this Khan Academy Perseus exercise and return ONLY a JSON object in the form {"answers":{...}}.
@@ -248,18 +324,18 @@ ${JSON.stringify(usedWidgets)}`;
 
         const extractAnswers = async (itemData) => {
             if (!openRouterKey) {
-                sendToast("🔑 Configure sua OpenRouter API key.", 6000, 'top');
+                sendToast("🔑 Configure your OpenRouter API key (Khanware menu).", 6000, 'top');
                 return [];
             }
 
             const content = questionContentText(itemData);
             const usedCount = Object.keys(itemData?.question?.widgets || {}).filter(key => isWidgetUsed(key, content, itemData?.hints)).length;
             if (usedCount === 0) {
-                console.log(`🚨 Khanware Minimal: nenhum widget usado encontrado. (${Object.keys(itemData?.question?.widgets || {}).length})`);
+                console.log(`🚨 Khanware Minimal: No used widgets found. (${Object.keys(itemData?.question?.widgets || {}).length})`);
                 return [];
             }
 
-            console.log(`🤖 Khanware Minimal: ${model} · ${usedCount} widgets usados`);
+            console.log(`🤖 Khanware Minimal: ${model} · ${usedCount} used widgets`);
 
             const callModel = async (withFormat) => {
                 const body = {
@@ -290,7 +366,15 @@ ${JSON.stringify(usedWidgets)}`;
                 response = await callModel(true);
                 if (response.status === 400) response = await callModel(false);
             } catch (e) {
-                console.log(`🚨 Khanware Minimal: OpenRouter request falhou\n${e}`);
+                console.log(`🚨 Khanware Minimal: OpenRouter request failed\n${e}`);
+                return [];
+            }
+
+            if (response.status === 429) {
+                if (!warnedRateLimit) {
+                    warnedRateLimit = true;
+                    sendToast("⚠️ OpenRouter free limit exceeded. Please wait a bit or use a paid model.", 6000, 'top');
+                }
                 return [];
             }
 
@@ -568,9 +652,9 @@ ${JSON.stringify(usedWidgets)}`;
                 };
                 
                 itemData.question.content = phrases[Math.floor(Math.random() * phrases.length)] + 
-                    `\n\n**Onde você deve obter seus scripts?**` + 
+                    `\n\n**Where should you get your scripts?**` + 
                     `[[☃ radio 1]]` + 
-                    `\n\n**💎 Quer ter a sua mensagem lida para TODOS utilizando o Khanware?** \nFaça uma [Donate Aqui](https://livepix.gg/nixyy)!`;
+                    `\n\n**💎 Want your message to be read by EVERYONE using Khanware?** \nDonate [Here](https://livepix.gg/nixyy)!`;
                 
                 itemData.question.widgets = {
                     "radio 1": {
@@ -581,12 +665,12 @@ ${JSON.stringify(usedWidgets)}`;
                         options: {
                             choices: [
                                 { 
-                                    content: "**I Can Say** e **Platform Destroyer**.", 
+                                    content: "**I Can Say** and **Platform Destroyer**.", 
                                     correct: true, 
                                     id: "correct-choice" 
                                 },
                                 { 
-                                    content: "Qualquer outro kibador **viado**.", 
+                                    content: "Any other **gay** script kiddie.", 
                                     correct: false, 
                                     id: "incorrect-choice" 
                                 }
@@ -640,7 +724,7 @@ ${JSON.stringify(usedWidgets)}`;
                     if (data?.data) { for (const key in data.data) { if (data.data[key]?.item) { item = data.data[key].item; break; } } }
                     
                     if (!item?.itemDataAnswerless) {
-                        console.log('🛠️ Khanware Minimal: getAssessmentItem sem itemDataAnswerless');
+                        console.log('🛠️ Khanware Minimal: getAssessmentItem without itemDataAnswerless');
                         return res;
                     }
                     
@@ -650,14 +734,14 @@ ${JSON.stringify(usedWidgets)}`;
                     let itemData = JSON.parse(item.itemDataAnswerless);
                     
                     if (itemId && openRouterKey && !correctAnswers.has(itemId) && !pendingSolves.has(itemId)) {
-                        console.log(`🤖 Khanware Minimal: resolvendo item ${itemId}...`);
-                        sendToast("🔍 Buscando respostas corretas...", 1500);
+                        console.log(`🤖 Khanware Minimal: solving item ${itemId}...`);
+                        sendToast("🔍 Searching for correct answers...", 1500);
                         const solvePromise = extractAnswers(JSON.parse(item.itemDataAnswerless))
                             .then((answers) => {
-                                console.log(`🤖 Khanware Minimal: item ${itemId} resolvido (${answers.length} widgets)`);
+                                console.log(`🤖 Khanware Minimal: item ${itemId} solved (${answers.length} widgets)`);
                                 if (answers.length > 0) {
                                     correctAnswers.set(itemId, answers);
-                                    sendToast(`🤖 IA resolveu a questão: ${answers.length}`, 2000);
+                                    sendToast(`🤖 AI solved the question: ${answers.length}`, 2000);
                                 }
                                 return answers;
                             })
@@ -677,7 +761,7 @@ ${JSON.stringify(usedWidgets)}`;
                             }
                         }
                         
-                        sendToast("🔓 Questão exploitada.", 750);
+                        sendToast("🔓 Assignment exploited.", 750);
                         return new Response(JSON.stringify(modified), { 
                             status: res.status, 
                             statusText: res.statusText, 
@@ -695,7 +779,7 @@ ${JSON.stringify(usedWidgets)}`;
                     console.log(`🛠️ Khanware Minimal: attemptProblem itemId=${itemId}`);
                     
                     if (!openRouterKey) {
-                        if (!warnedNoKey) { warnedNoKey = true; sendToast("🔑 Configure sua OpenRouter API key.", 5000, 'top'); }
+                        if (!warnedNoKey) { warnedNoKey = true; sendToast("🔑 Configure your OpenRouter API key (Khanware menu).", 5000, 'top'); }
                         return originalFetch.apply(this, arguments);
                     }
                     
@@ -748,8 +832,8 @@ ${JSON.stringify(usedWidgets)}`;
                         
                         const activateCooldown = () => {
                             antiCheatActive = true;
-                            sendToast("⚠️ Anti-cheat detectado!", 3000);
-                            sendToast("⏳ Aguarde 30 segundos nessa atividade", 3000);
+                            sendToast("⚠️ Anti-cheat detected.", 3000);
+                            sendToast("⏳ Wait 30 seconds on this activity.", 3000);
                             setTimeout(() => {
                                 antiCheatActive = false;
                             }, 30000);
@@ -774,7 +858,7 @@ ${JSON.stringify(usedWidgets)}`;
                             if (responseData.data?.updateUserVideoProgress?.error?.code === "CHEATING") {
                                 activateCooldown();
                             } else {
-                                sendToast("🔓 Vídeo exploitado.", 2000);
+                                sendToast("🔓 Video exploited.", 2000);
                             }
                             
                             return lastResponse;
@@ -814,7 +898,7 @@ ${JSON.stringify(usedWidgets)}`;
                             }
                             
                             if (!antiCheatActive) {
-                                sendToast("🔓 Video exploitado.", 2000);
+                                sendToast("🔓 Video exploited.", 2000);
                             }
                             
                             return lastResponse;
@@ -837,7 +921,7 @@ ${JSON.stringify(usedWidgets)}`;
             else if (init.body) body = init.body;
             if (body && input.url.includes("mark_conversions")) {
                 try {
-                    if (body.includes("termination_event")) { sendToast("🚫 Limitador de tempo bloqueado.", 1000); return; }
+                    if (body.includes("termination_event")) { sendToast("🚫 Time limiter blocked.", 1000); return; }
                 } catch (e) { }
             }
             return originalFetch.apply(this, arguments);
@@ -845,7 +929,7 @@ ${JSON.stringify(usedWidgets)}`;
     })();
 }
 /* Inject */
-if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) { alert("❌ Khanware Failed to Injected!\n\nVocê precisa executar o Khanware no site do Khan Academy! (https://pt.khanacademy.org/)"); window.location.href = "https://pt.khanacademy.org/"; }
+if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) { alert("❌ Khanware Failed to Inject!\n\nYou need to run Khanware on the Khan Academy website! (https://www.khanacademy.org/)"); window.location.href = "https://www.khanacademy.org/"; }
 
 showSplashScreen();
 
@@ -853,7 +937,7 @@ loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.92/darkreader.min.js', '
 loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css', 'toastifyCss');
 loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
 .then(async () => {    
-    sendToast("🪶 Khanware Minimal injetado com sucesso!");
+    sendToast("🪶 Khanware Minimal injected successfully!");
 
     playAudio('https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/gcelzszy.wav');
     

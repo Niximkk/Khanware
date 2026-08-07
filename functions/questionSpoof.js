@@ -10,6 +10,7 @@ const originalFetch = window.fetch;
 const correctAnswers = new Map();
 const pendingSolves = new Map();
 let warnedNoKey = false;
+let warnedRateLimit = false;
 
 const toFraction = (d) => { if (d === 0 || d === 1) return String(d); const decimals = (String(d).split('.')[1] || '').length; let num = Math.round(d * Math.pow(10, decimals)), den = Math.pow(10, decimals); const gcd = (a, b) => { while (b) [a, b] = [b, a % b]; return a; }; const div = gcd(Math.abs(num), Math.abs(den)); return den / div === 1 ? String(num / div) : `${num / div}/${den / div}`; };
 const getItemId = (body) => { try { const req = JSON.parse(body); return req?.variables?.assessmentItemId || req?.variables?.input?.assessmentItemId || req?.variables?.item?.id || null; } catch (e) { return null; } };
@@ -38,11 +39,86 @@ const questionContentText = (itemData) => {
     return Array.isArray(content) ? content.join('\n') : String(content ?? '');
 };
 
+const condenseWidget = (w) => {
+    const type = w?.type || 'unknown';
+    const options = w?.options || {};
+    const o = {};
+    if (type === 'radio') {
+        o.choices = (options.choices || []).map(c => (typeof c === 'string' ? c : c.content));
+        if (options.multipleSelect) o.multipleSelect = true;
+    }
+    else if (type === 'dropdown') {
+        o.choices = (options.choices || []).map(c => (typeof c === 'string' ? c : c.content));
+        if (options.placeholder) o.placeholder = options.placeholder;
+    }
+    else if (type === 'numeric-input') {
+        if (options.answerType) o.answerType = options.answerType;
+        if (options.simplify) o.simplify = options.simplify;
+    }
+    else if (type === 'input-number') {
+        if (options.answerType) o.answerType = options.answerType;
+        if (options.simplify) o.simplify = options.simplify;
+    }
+    else if (type === 'expression') {
+        if (Array.isArray(options.buttonSets)) o.buttonSets = options.buttonSets;
+        if (Array.isArray(options.functions)) o.functions = options.functions;
+        if (options.times) o.times = true;
+    }
+    else if (type === 'grapher') {
+        if (options.graph) o.graph = options.graph;
+    }
+    else if (type === 'interactive-graph') {
+        if (options.graph) o.graph = options.graph;
+        if (options.snapTo) o.snapTo = options.snapTo;
+    }
+    else if (type === 'categorizer') {
+        if (Array.isArray(options.categories)) o.categories = options.categories;
+        if (Array.isArray(options.items)) o.items = options.items;
+    }
+    else if (type === 'matcher') {
+        if (options.left) o.left = options.left;
+        if (options.right) o.right = options.right;
+    }
+    else if (type === 'orderer') {
+        if (Array.isArray(options.correctOptions)) o.options = options.correctOptions;
+    }
+    else if (type === 'sorter') {
+        if (options.layout) o.layout = options.layout;
+        if (Array.isArray(options.correct)) o.correct = options.correct;
+    }
+    else if (type === 'number-line') {
+        if (options.range) o.range = options.range;
+        if (options.tickStep) o.tickStep = options.tickStep;
+        if (options.numDivisions) o.numDivisions = options.numDivisions;
+    }
+    else if (type === 'plotter') {
+        if (options.type) o.type = options.type;
+        if (Array.isArray(options.categories)) o.categories = options.categories;
+        if (Array.isArray(options.labels)) o.labels = options.labels;
+        if (options.maxY) o.maxY = options.maxY;
+        if (options.scaleY) o.scaleY = options.scaleY;
+        if (options.snapsPerLine) o.snapsPerLine = options.snapsPerLine;
+        if (options.labelInterval) o.labelInterval = options.labelInterval;
+        if (Array.isArray(options.starting)) o.starting = options.starting;
+        if (options.picUrl) o.picUrl = options.picUrl;
+    }
+    else if (type === 'matrix') {
+        if (options.matrixBoardSize) o.matrixBoardSize = options.matrixBoardSize;
+    }
+    else if (type === 'label-image') {
+        if (Array.isArray(options.markers)) o.markers = options.markers.map(m => ({ label: m.label, x: m.x, y: m.y }));
+        if (Array.isArray(options.choices)) o.choices = options.choices.map(c => (typeof c === 'string' ? c : c.content));
+        if (options.imageUrl) o.imageUrl = options.imageUrl;
+        if (options.multipleAnswers) o.multipleAnswers = true;
+    }
+    return { type, options: o };
+};
+
 const buildSolvePrompt = (itemData) => {
     const content = questionContentText(itemData);
     const usedWidgets = {};
     for (const [key, w] of Object.entries(itemData?.question?.widgets || {})) {
-        if (isWidgetUsed(key, content, itemData?.hints)) usedWidgets[key] = w;
+        if (isWidgetUsed(key, content, itemData?.hints)) usedWidgets[key] = condenseWidget(w);
     }
 
     return `Solve this Khan Academy Perseus exercise and return ONLY a JSON object in the form {"answers":{...}}.
@@ -260,6 +336,14 @@ const extractAnswers = async (itemData) => {
         if (response.status === 400) response = await callModel(false);
     } catch (e) {
         debug(`🚨 Khanware questionSpoof: OpenRouter request falhou\n${e}`);
+        return [];
+    }
+
+    if (response.status === 429) {
+        if (!warnedRateLimit) {
+            warnedRateLimit = true;
+            sendToast(`⚠️ ${t('openrouter_rate_limited')}`, 6000, 'top');
+        }
         return [];
     }
 

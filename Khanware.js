@@ -37,9 +37,9 @@ let KWSection;
 window.features = {
     questionSpoof: true,
     videoSpoof: true,
-    showAnswers: false,
+    /* showAnswers: false, */
     autoAnswer: false,
-    workerBees: false,
+    /* workerBees: false, */
     customBanner: false,
     nextRecomendation: false,
     repeatQuestion: false,
@@ -125,11 +125,11 @@ function setupMain(){
     loadScript(repoPath+'functions/videoSpoof.js', 'videoSpoof');
     loadScript(repoPath+'functions/minuteFarm.js', 'minuteFarm');
     loadScript(repoPath+'functions/spoofUser.js', 'spoofUser');
-    loadScript(repoPath+'functions/answerRevealer.js', 'answerRevealer');
+    /* loadScript(repoPath+'functions/answerRevealer.js', 'answerRevealer'); */
     loadScript(repoPath+'functions/rgbLogo.js', 'rgbLogo');
     loadScript(repoPath+'functions/customBanner.js', 'customBanner');
     loadScript(repoPath+'functions/autoAnswer.js', 'autoAnswer');
-    loadScript(repoPath+'functions/workerBees.js', 'workerBees');
+    /* loadScript(repoPath+'functions/workerBees.js', 'workerBees'); */
 }
 
 /* Inject */

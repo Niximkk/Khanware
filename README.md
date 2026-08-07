@@ -1,11 +1,9 @@
-# 🌿 Khanware (2024 - 2026)
+# 🌿 Khanware
 
-> 🪦 I don’t have time to maintain this anymore. Consider using [Khanto](https://khan.cupiditys.lol/).  
-> I’m not sure how a non-Brazilian student would use that tool, but in that case, I would probably reach out to the developer.
+### The Most Advanced Client-Side Khan Academy Cheat.
 
-> If you have the required knowledge, feel free to fix the code yourself (PRs are welcome here).
-
-### The most advanced Khan Academy cheat.
+> 💠 Doação via pix:
+> https://livepix.gg/nixyy
 
 🙂 Stable:
 ```js
@@ -33,6 +31,8 @@ How to get one (it's free, no credit card required):
    - **Minimal version:** paste it into the prompt that appears when the script runs.
 
 The default model is `openrouter/free` (uses free models). You can change it in the full version's menu.
+
+---
 
 By creating this repository, I grant permission for everyone to use my code. However, since it is licensed under the GPL, any modifications or distributions must also be open source.
 
