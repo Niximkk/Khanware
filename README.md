@@ -17,6 +17,20 @@ javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@dev/Khanware.js")
 javascript:fetch("https://cdn.jsdelivr.net/gh/niximkk/khanware@master/khanwareMinimal.js").then(t=>t.text()).then(eval);
 ```
 
+### 🤖 OpenRouter API key (required for the AI auto-answer)
+
+The AI question-solver uses the [OpenRouter](https://openrouter.ai/) API to solve exercises for you. **You need an OpenRouter API key for this feature to work** — without it the display spoof still works, but questions won't be solved automatically.
+
+How to get one (it's free, no credit card required):
+1. Go to https://openrouter.ai/keys and create an account (or sign in).
+2. Click **Create Key**, give it any name, and click **Create**.
+3. Copy the generated key — it starts with `sk-or-v1-...`. Keep it private, don't share it.
+4. Paste it into Khanware when asked:
+   - **Full version:** open the menu and paste the key into the OpenRouter field.
+   - **Minimal version:** paste it into the prompt that appears when the script runs.
+
+The default model is `openrouter/free` (uses free models). You can change it in the full version's menu.
+
 By creating this repository, I grant permission for everyone to use my code. However, since it is licensed under the GPL, any modifications or distributions must also be open source.
 
 Thank you all for your support over the last few months.
