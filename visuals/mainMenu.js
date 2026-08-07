@@ -93,7 +93,7 @@ dropdownMenu.innerHTML = `
         input[type="checkbox"] {appearance: none; width: 15px; height: 15px; background-color: #3a3a3b;
         border: 1px solid #acacac; border-radius: 3px; margin-right: 5px; cursor: pointer;}
         input[type="checkbox"]:checked {background-color: #540b8a; border-color: #720fb8;}
-        input[type="text"], input[type="number"], input[type="range"] {width: calc(100% - 10px); border: 1px solid #343434; 
+        input[type="text"], input[type="password"], input[type="number"], input[type="range"] {width: calc(100% - 10px); border: 1px solid #343434; 
         color: white; accent-color: #540b8a; background-color: #540b8a; padding: 3px; border-radius: 3px; background: none;}
         label {display: flex; align-items: center; color: #3a3a3b; padding-top: 3px;}
     </style>
@@ -118,7 +118,11 @@ let featuresList = [
     { name: `${t('custom_user')}`, type: 'nonInput' },
     { name: 'customName', type: 'text', variable: 'featureConfigs.customUsername', attributes: 'autocomplete="off"' },
     { name: `${t('custom_pfp')}`, type: 'nonInput' },
-    { name: 'customPfp', type: 'text', variable: 'featureConfigs.customPfp', attributes: 'autocomplete="off"' }
+    { name: 'customPfp', type: 'text', variable: 'featureConfigs.customPfp', attributes: 'autocomplete="off"' },
+    { name: `${t('openrouter_key')}`, type: 'nonInput' },
+    { name: 'openRouterKey', type: 'text', variable: 'featureConfigs.openRouterKey', attributes: 'autocomplete="off" type="password" placeholder="sk-or-v1-..."' },
+    { name: `${t('openrouter_model')}`, type: 'nonInput' },
+    { name: 'openRouterModel', type: 'text', variable: 'featureConfigs.openRouterModel', attributes: 'autocomplete="off" placeholder="openrouter/free"' }
   ];
   
 
@@ -128,6 +132,7 @@ addFeature(featuresList);
 
 handleInput(['questionSpoof', 'videoSpoof', 'showAnswers', 'nextRecomendation', 'repeatQuestion', 'minuteFarm', 'customBanner', 'rgbLogo', 'workerBees']);
 handleInput(['customName', 'customPfp']);
+handleInput(['openRouterKey', 'openRouterModel']);
 handleInput('autoAnswer', checked => checked && !features.questionSpoof && (document.querySelector('[setting-data="features.questionSpoof"]').checked = features.questionSpoof = true));
 handleInput('autoAnswerDelay', value => value && (featureConfigs.autoAnswerDelay = 4 - value));
 handleInput('darkMode', checked => checked ? (DarkReader.setFetchMethod(window.fetch), DarkReader.enable()) : DarkReader.disable());
