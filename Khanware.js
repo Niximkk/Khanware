@@ -110,7 +110,7 @@ async function initializeRepoPath() {
 
 /* Visual Functions */
 function setupMenu() {
-    plppdo.on("domChanged",(()=>{if(document.getElementById("khanwareTab"))return;const e=document.querySelector('nav[data-testid="side-nav"]');e&&(KWSection=document.createElement("section"),KWSection.id="khanwareTab",KWSection.className="_evg4u4",KWSection.innerHTML='<h2 class="_n0asy6j">Khanware</h2>',e.appendChild(KWSection))}));
+    plppdo.on("domChanged",(()=>{if(document.getElementById("khanwareTab"))return;const e=document.querySelector('nav[data-testid="side-nav"]');e&&(KWSection=document.createElement("section"),KWSection.id="khanwareTab",KWSection.className="_evg4u4",KWSection.innerHTML='<h2 class="_e3ps3qj">Khanware</h2>',e.appendChild(KWSection))}));
     loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
     loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
     loadScript(repoPath+'visuals/donationOverlay.js', 'donationOverlay');
