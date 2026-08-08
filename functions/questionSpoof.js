@@ -121,7 +121,7 @@ const buildSolvePrompt = (itemData) => {
         if (isWidgetUsed(key, content, itemData?.hints)) usedWidgets[key] = condenseWidget(w);
     }
 
-    return `Solve this Khan Academy Perseus exercise and return ONLY a JSON object in the form {"answers":{...}}.
+    return `Solve this  Perseus exercise and return ONLY a JSON object in the form {"answers":{...}}.
 
 The question may cover ANY subject (mathematics, science, language arts, history, geography, etc.). Read it in its original language — it can be in Portuguese, Spanish, English or another language — and work out the answer using your own knowledge and reasoning.
 
@@ -312,7 +312,7 @@ const extractAnswers = async (itemData) => {
             temperature: 0,
             max_tokens: 4096,
             messages: [
-                { role: 'system', content: 'You are an expert at solving Khan Academy Perseus exercises in any subject (mathematics, science, language arts, history, etc.). Read each question in its original language and work out the answer through reasoning. You only output valid JSON, nothing else.' },
+                { role: 'system', content: 'You are an expert at solving  Perseus exercises in any subject (mathematics, science, language arts, history, etc.). Read each question in its original language and work out the answer through reasoning. You only output valid JSON, nothing else.' },
                 { role: 'user', content: buildSolvePrompt(itemData) }
             ]
         };
@@ -379,8 +379,9 @@ const applyAnswers = (bodyObj, answers) => {
     const answerKeys = new Set(answers.map(a => a.widgetKey));
     const stateKeys = Object.keys(state);
     
-    const hasInvalidWidgets = stateKeys.some(key => !answerKeys.has(key) && key !== 'hint');
-    if (hasInvalidWidgets) { state = {}; answers.forEach(a => { state[a.widgetKey] = {}; }); }
+    const hasInvalidWidgets = stateKeys.some(key => key !== 'hint' && !answerKeys.has(key));
+    const hasOverlappingWidgets = stateKeys.some(key => key !== 'hint' && answerKeys.has(key));
+    if (hasInvalidWidgets && hasOverlappingWidgets) { state = {}; answers.forEach(a => { state[a.widgetKey] = {}; }); }
 
     answers.forEach(a => {
         if (a.type === 'radio') {
