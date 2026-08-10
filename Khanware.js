@@ -49,7 +49,8 @@ window.features = {
 window.featureConfigs = {
     autoAnswerDelay: 3,
     customUsername: "",
-    customPfp: ""
+    customPfp: "",
+    openRouterKey: ""
 };
 
 /* Localization */
@@ -108,6 +109,11 @@ async function initializeRepoPath() {
     console.log('The entire internet is down for some reason. God help us all...');
 }
 
+/* Utils */
+function setupUtils() {
+    loadScript(repoPath+'utils/apiKeyStore.js', 'apiKeyStore');
+}
+
 /* Visual Functions */
 function setupMenu() {
     plppdo.on("domChanged",(()=>{if(document.getElementById("khanwareTab"))return;const e=document.querySelector('nav[data-testid="side-nav"]');e&&(KWSection=document.createElement("section"),KWSection.id="khanwareTab",KWSection.className="_evg4u4",KWSection.innerHTML='<h2 class="_e3ps3qj">Khanware</h2>',e.appendChild(KWSection))}));
@@ -158,6 +164,7 @@ function setupMain(){
         loadedPlugins.forEach(plugin => sendToast(`🪝 ${plugin} Loaded!`, 2000, 'top') );
         
         hideSplashScreen();
+        setupUtils();
         setupMenu();
         setupMain();
         

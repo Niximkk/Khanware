@@ -14,6 +14,12 @@ function addFeature(features) {
             });
         }
 
+        if (attribute.variable && element.tagName === 'INPUT') {
+            const currentValue = attribute.variable.split('.').reduce((obj, key) => obj?.[key], window);
+            if (attribute.type === 'checkbox') { if (currentValue) element.setAttribute('checked', ''); }
+            else if (currentValue) { element.value = currentValue; }
+        }
+
         if (attribute.variable) element.setAttribute('setting-data', attribute.variable);
         if (attribute.dependent) element.setAttribute('dependent', attribute.dependent);
         if (attribute.className) element.classList.add(attribute.className);
@@ -102,8 +108,8 @@ dropdownMenu.innerHTML = `
 watermark.appendChild(dropdownMenu);
 
 let featuresList = [
-    { name: 'questionSpoof', type: 'checkbox', variable: 'features.questionSpoof', attributes: 'checked', labeled: true, label: `${t('question_spoof')}` },
-    { name: 'videoSpoof', type: 'checkbox', variable: 'features.videoSpoof', attributes: 'checked', labeled: true, label: `${t('video_spoof')}` },
+    { name: 'questionSpoof', type: 'checkbox', variable: 'features.questionSpoof', labeled: true, label: `${t('question_spoof')}` },
+    { name: 'videoSpoof', type: 'checkbox', variable: 'features.videoSpoof', labeled: true, label: `${t('video_spoof')}` },
     /* { name: 'showAnswers', type: 'checkbox', variable: 'features.showAnswers', labeled: true, label: `${t('answer_reveal')}` }, */
     { name: 'autoAnswer', type: 'checkbox', variable: 'features.autoAnswer', dependent: 'autoAnswerDelay,nextRecomendation,repeatQuestion', labeled: true, label: `${t('auto_answer')}` },
     { name: 'repeatQuestion', className: 'repeatQuestion', type: 'checkbox', variable: 'features.repeatQuestion', attributes: 'style="display:none;"', labeled: true, label: `${t('repeat_question')}` },
@@ -130,9 +136,9 @@ featuresList.push({ name: `${user.username} - UID: ${user.UID}`, type: 'nonInput
 
 addFeature(featuresList);
 
-handleInput(['questionSpoof', 'videoSpoof', /* 'showAnswers', */ 'nextRecomendation', 'repeatQuestion', 'minuteFarm', 'customBanner', 'rgbLogo' /* , 'workerBees' */]);
+handleInput(['questionSpoof', 'videoSpoof', /* 'showAnswers', */ 'nextRecomendation', 'repeatQuestion', 'minuteFarm', 'customBanner', 'rgbLogo' /* , 'workerBees' */, 'openRouterModel']);
 handleInput(['customName', 'customPfp']);
-handleInput(['openRouterKey', 'openRouterModel']);
+handleInput('openRouterKey', async (value) => { await saveApiKey(value, user.uid); });
 handleInput('autoAnswer', checked => checked && !features.questionSpoof && (document.querySelector('[setting-data="features.questionSpoof"]').checked = features.questionSpoof = true));
 handleInput('autoAnswerDelay', value => value && (featureConfigs.autoAnswerDelay = 4 - value));
 handleInput('darkMode', checked => checked ? (DarkReader.setFetchMethod(window.fetch), DarkReader.enable()) : DarkReader.disable());
