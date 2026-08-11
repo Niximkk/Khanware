@@ -41,7 +41,7 @@ function addFeature(features) {
     });
     dropdownMenu.innerHTML += feature.outerHTML;
 }
-function handleInput(ids, callback = null) {
+function handleInput(ids, callback = null, eventType = 'input') {
     (Array.isArray(ids) ? ids.map(id => document.getElementById(id)) : [document.getElementById(ids)])
     .forEach(element => {
         if (!element) return;
@@ -61,7 +61,7 @@ function handleInput(ids, callback = null) {
                         depEl.style.display = e.target.checked ? null : "none"));
             });
         } else {
-            element.addEventListener('input', (e) => handleEvent(e, e.target.value));
+            element.addEventListener(eventType, (e) => handleEvent(e, e.target.value));
         }
     });
 }
@@ -138,7 +138,7 @@ addFeature(featuresList);
 
 handleInput(['questionSpoof', 'videoSpoof', /* 'showAnswers', */ 'nextRecomendation', 'repeatQuestion', 'minuteFarm', 'customBanner', 'rgbLogo' /* , 'workerBees' */, 'openRouterModel']);
 handleInput(['customName', 'customPfp']);
-handleInput('openRouterKey', async (value) => { await saveApiKey(value, user.uid); });
+handleInput('openRouterKey', async (value) => { await saveApiKey(value, user.UID); }, 'blur');
 handleInput('autoAnswer', checked => checked && !features.questionSpoof && (document.querySelector('[setting-data="features.questionSpoof"]').checked = features.questionSpoof = true));
 handleInput('autoAnswerDelay', value => value && (featureConfigs.autoAnswerDelay = 4 - value));
 handleInput('darkMode', checked => checked ? (DarkReader.setFetchMethod(window.fetch), DarkReader.enable()) : DarkReader.disable());

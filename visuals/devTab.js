@@ -120,13 +120,5 @@ window.createToggle = function(name, desc, varName, toggled = false) {
 
     toggleContainer.appendChild(toggleElement);
 };
-window.debug = function(message) {
-    if (!window.khanwareWin || window.khanwareWin.closed || !window.debugMode) return;
-    
-    const debugBox = window.khanwareWin.document.getElementById('debugBox');
-    if (debugBox) {
-        debugBox.innerHTML += message + '\n';
-        debugBox.scrollTop = debugBox.scrollHeight;
-    }
-};
+
 window.onerror = function(message, source, lineno, colno, error) { debug(`🚨 ${t('error_at')} ${source}:${lineno},${colno} \n${error ? error.stack : message}`); return true; };
