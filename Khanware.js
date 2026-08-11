@@ -1,5 +1,5 @@
-const ver = "V3.10.0";
-let isDev = false;
+const ver = "V3.11.0";
+let isDev = true;
 
 let repoPath;
 
@@ -164,6 +164,9 @@ function setupMain(){
         loadedPlugins.forEach(plugin => sendToast(`🪝 ${plugin} Loaded!`, 2000, 'top') );
         
         hideSplashScreen();
+
+        getApiKey(user.UID);
+
         setupUtils();
         setupMenu();
         setupMain();
