@@ -17,7 +17,7 @@ function addFeature(features) {
         if (attribute.variable && element.tagName === 'INPUT') {
             const currentValue = attribute.variable.split('.').reduce((obj, key) => obj?.[key], window);
             if (attribute.type === 'checkbox') { if (currentValue) element.setAttribute('checked', ''); }
-            else if (currentValue) { element.value = currentValue; }
+            else if (currentValue) { element.setAttribute('value', currentValue); }
         }
 
         if (attribute.variable) element.setAttribute('setting-data', attribute.variable);

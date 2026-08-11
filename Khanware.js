@@ -128,6 +128,7 @@ function setupMain(){
     await initializeRepoPath();
 
     await loadScript(repoPath+'utils/utils.js', 'utils');
+    
     await loadScript('https://cdn.jsdelivr.net/gh/adryd325/oneko.js@master/oneko.js', 'onekoJs').then(() => { onekoEl = document.getElementById('oneko'); onekoEl.style.backgroundImage = "url('https://cdn.jsdelivr.net/gh/adryd325/oneko.js@master/oneko.gif')"; onekoEl.style.display = "none"; });
     await loadScript('https://cdn.jsdelivr.net/npm/darkreader@latest/darkreader.min.js', 'darkReaderPlugin').then(()=>{ DarkReader.setFetchMethod(window.fetch); DarkReader.enable(); })
     await loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
@@ -149,7 +150,7 @@ function setupMain(){
     
     hideSplashScreen();
 
-    getApiKey(user.UID);
+    await getApiKey(user.UID);
 
     setupMenu();
     setupMain();
