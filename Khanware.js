@@ -165,9 +165,10 @@ function setupMain(){
         
         hideSplashScreen();
 
+        setupUtils();
+
         getApiKey(user.UID);
 
-        setupUtils();
         setupMenu();
         setupMain();
         
