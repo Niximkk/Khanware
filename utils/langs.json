@@ -66,7 +66,10 @@
         "tweaks_tab": "Ajustes Ocultos",
         "roles_enabled": "Funções de Professor e Responsável habilitada.",
         "video_playback_tweak": "Vídeo em 2x e Mudo",
-        "not_underage": "Idade alterada para maior de idade."
+        "not_underage": "Idade alterada para maior de idade.",
+
+        "api_restored": "API Key Restaurada.",
+        "api_stored": "API Key Salva."
     },
     "en": {
         "injection_success": "Khanware injected successfully!",
@@ -135,7 +138,10 @@
         "tweaks_tab": "Tweaks",
         "roles_enabled": "Teacher and Parent roles enabled.",
         "video_playback_tweak": "2x and Muted Video",
-        "not_underage": "Age set to 18+."
+        "not_underage": "Age set to 18+.",
+
+        "api_restored": "API Key Restored.",
+        "api_stored": "API Key Saved."
     },
     "es": {
         "injection_success": "¡Khanware inyectado con éxito!",
@@ -204,6 +210,9 @@
         "tweaks_tab": "Ajustes Ocultos",
         "roles_enabled": "Roles de Profesor y Padre habilitados.",
         "video_playback_tweak": "Vídeo en 2x y Silenciado",
-        "not_underage": "Edad configurada como mayor de edad."
+        "not_underage": "Edad configurada como mayor de edad.",
+
+        "api_restored": "Clave de API restaurada.",
+        "api_stored": "Clave de API guardada."
     }
 }
