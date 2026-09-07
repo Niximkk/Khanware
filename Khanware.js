@@ -1,9 +1,10 @@
-const ver = "V3.11.0";
-let isDev = false;
+const ver = "V3.11.1";
+let isDev = true;
 
 let repoPath;
 
 const availableCDNs = [
+    ...(isDev && window.__DEV_LOCAL_ORIGIN__ ? [window.__DEV_LOCAL_ORIGIN__] : []),
     `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`,
     `https://cdn.jsdelivr.net/gh/niximkk/Khanware@${isDev ? "dev" : "master"}/`,
     `https://cdn.statically.io/gh/Niximkk/Khanware/refs/heads/${isDev ? "dev" : "main"}/`
