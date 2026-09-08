@@ -38,7 +38,12 @@ async function main() {
     reloadTimer = setTimeout(async () => {
       try {
 
-        await reloadAndReinject(page, CONFIG.localServerPort, CONFIG.mainScriptFile);
+        await reloadAndReinject(
+          page,
+          CONFIG.localServerPort,
+          CONFIG.mainScriptFile,
+          CONFIG.targetUrl,
+        );
         broadcastReload();
       } catch (err) {
         console.log(chalk.red(`[watch] reload error: ${err.message}`));

@@ -37,6 +37,11 @@ async function launchBrowser({ userDataDir, targetUrl, localServerPort, mainScri
   console.log(chalk.cyan(`[browser] navigating to ${targetUrl}`));
   await page.goto(targetUrl, { waitUntil: 'networkidle2' });
 
+  const blankPages = (await browser.pages()).filter(
+    (otherPage) => otherPage !== page && otherPage.url() === 'about:blank',
+  );
+  await Promise.all(blankPages.map((blankPage) => blankPage.close()));
+
   console.log(chalk.yellow('[browser] if you are not logged in yet, log in manually in the Chrome window.'));
 
   await injectMainScript(page, localServerPort, mainScriptFile);
@@ -59,9 +64,9 @@ async function injectMainScript(page, localServerPort, mainScriptFile) {
   }
 }
 
-async function reloadAndReinject(page, localServerPort, mainScriptFile) {
+async function reloadAndReinject(page, localServerPort, mainScriptFile, targetUrl) {
   console.log(chalk.magenta('[browser] reloading page...'));
-  await page.reload({ waitUntil: 'networkidle2' });
+  await page.goto(targetUrl, { waitUntil: 'networkidle2' });
   await injectMainScript(page, localServerPort, mainScriptFile);
 }
 
